@@ -8,6 +8,9 @@ class Object {
     vel = new PVector (xSpd, ySpd);
   }
 
+  void render() {
+  }
+
   void update() {
   }
 }

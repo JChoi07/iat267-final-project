@@ -5,8 +5,8 @@ int gameUI=1;
 int w=200;
 int counter = 0;
 int x, y;
-int score;
 PImage chefSprite;
+Score score;
 
 ArrayList<Chef> bgChefs = new ArrayList<Chef>();
 
@@ -15,9 +15,10 @@ void loadAssets() {
   chefSprite = loadImage("chef-sprite.png");
   cashScore = loadImage("cash-bill.jpg");
 
+  score = new Score();
+
   PFont gameFont = loadFont("LoRes12OT-BoldAltOakland-48.vlw");
   textFont(gameFont, 48);
-  //textAlign(CENTER);
 }
 
 void createBgChefs() {
@@ -25,12 +26,6 @@ void createBgChefs() {
     Chef smallChef = new Chef(100, 100, 0, 0);
     bgChefs.add(smallChef);
   }
-}
-
-void updateScore() {
-  fill(0);
-  textSize(36);
-  text("$" + score, 180, 75);
 }
 
 /*======================
@@ -101,7 +96,7 @@ void displayGameUI() {
   image(gameBg, 0, 0);
   image(cashScore, 60, 30);
   createBgChefs();
-  updateScore();
+  score.render();
 }
 
 void gameStart() {
@@ -114,11 +109,13 @@ void gameStart() {
   //victory();
 }
 
-void gameOver() {
-}
-
 void homeScreen() {
 }
+
+void gameOver() {
+  text(score.score, width/2, height/2);
+}
+
 
 void gameplay() {
   for (Chef bgChefs : bgChefs) {
