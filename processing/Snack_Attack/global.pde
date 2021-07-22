@@ -1,6 +1,6 @@
 PImage gameBg, cashScore;
 int gameState=1;
-int gameSpeed = 3;
+int gameSpeed = -3;
 int startPage=0;
 int gameUI=1;
 int w=200;
@@ -12,9 +12,8 @@ Score score;
 ArrayList<Chef> bgChefs = new ArrayList<Chef>();
 ArrayList<Buttons> buttons = new ArrayList<Buttons>();
 ArrayList<ConveyorBelt> cBelt = new ArrayList<ConveyorBelt>();
-//ArrayList<ConveyorBeltLines> cbLines = new ArrayList<ConveyorBeltLines>();
+ArrayList<ConveyorBeltLines> cbLines = new ArrayList<ConveyorBeltLines>();
 ConveyorBeltLines line;
-test t;
 //Buttons button;
 
 void loadAssets() {
@@ -26,6 +25,10 @@ void loadAssets() {
 
   PFont gameFont = loadFont("LoRes12OT-BoldAltOakland-48.vlw");
   textFont(gameFont, 48);
+  createBgChefs();
+  createConveyorBelt();
+  createButtons();
+  setUpLines();
 }
 
 void createButtons() {
@@ -33,7 +36,6 @@ void createButtons() {
   for (int i = 0; i < 4; i++) {
     buttons.add(new Buttons(-5, 620 + (i*110), 0, 0));
   }
-  t = new test(new PVector(width/2, height/2), new PVector(5, 0));
 }
 
 void updateButtons(){
@@ -41,8 +43,6 @@ void updateButtons(){
     Buttons b = buttons.get(i);
     b.update();
   }
-  t.drawMe();
-  t.update();
 }
 
 void createConveyorBelt() {
@@ -60,18 +60,19 @@ void updateConveyorBelt() {
 }
 
   void setUpLines() {
-   // for(int i = 0; i<1; i++){
-   //   cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630 + (i*110), 3, 0));
-   //}
-   line = new ConveyorBeltLines(0, 630, 3, 0);
+    for(int i = 0; i<19; i++){                                                  //set up conveyor belt lines for every belt
+      cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630, gameSpeed, 0));
+      cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630 + 110, gameSpeed, 0));
+      cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630 + 220, gameSpeed, 0));
+      cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630 + 330, gameSpeed, 0));
+   }
   }
 
   void animateLines() {
-   //for(int i = 0; i<cbLines.size(); i++){
-   //  ConveyorBeltLines cbL = cbLines.get(i);
-   //  cbL.update();
-   //}
-   line.update();
+   for(int i = 0; i<cbLines.size(); i++){                                       //animate movement
+     ConveyorBeltLines cbL = cbLines.get(i);
+     cbL.update();
+   }
   }
 
 
@@ -157,11 +158,14 @@ void displayGameUI() {
 }
 
 void gameStart() {
-  displayGameUI();
+  image(gameBg, 0, 0);
+  image(cashScore, 60, 30);
+  //displayGameUI();
   standBy();
   updateConveyorBelt();
-  updateButtons();
   animateLines();
+  updateButtons();
+  score.render();
   //punch();
   //fly();
   //run();

@@ -18,11 +18,14 @@ class ConveyorBeltLines extends Object {
   
   void animate(){
     pos.add(vel); 
-    println("working");
+    if (pos.x < 0){
+      pos.x = width - 10; 
+    }
   }
   
   void update(){
     render(); 
     animate();
+    println(pos.x);
   }
 }
