@@ -18,8 +18,8 @@ class ConveyorBeltLines extends Object {
   
   void animate(){
     pos.add(vel); 
-    if (pos.x < 0){
-      pos.x = width - 10; 
+    if (pos.x < -5){
+      pos.x = width - 20; 
     }
   }
   

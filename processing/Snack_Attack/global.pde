@@ -61,10 +61,10 @@ void updateConveyorBelt() {
 
   void setUpLines() {
     for(int i = 0; i<19; i++){                                                  //set up conveyor belt lines for every belt
-      cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630, gameSpeed, 0));
-      cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630 + 110, gameSpeed, 0));
-      cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630 + 220, gameSpeed, 0));
-      cbLines.add(new ConveyorBeltLines(0 + (100 * i), 630 + 330, gameSpeed, 0));
+      cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630, gameSpeed, 0));
+      cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 110, gameSpeed, 0));
+      cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 220, gameSpeed, 0));
+      cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 330, gameSpeed, 0));
    }
   }
 
