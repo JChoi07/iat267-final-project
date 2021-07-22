@@ -14,6 +14,7 @@ ArrayList<Buttons> buttons = new ArrayList<Buttons>();
 ArrayList<ConveyorBelt> cBelt = new ArrayList<ConveyorBelt>();
 //ArrayList<ConveyorBeltLines> cbLines = new ArrayList<ConveyorBeltLines>();
 ConveyorBeltLines line;
+test t;
 //Buttons button;
 
 void loadAssets() {
@@ -32,7 +33,7 @@ void createButtons() {
   for (int i = 0; i < 4; i++) {
     buttons.add(new Buttons(-5, 620 + (i*110), 0, 0));
   }
-  
+  t = new test(new PVector(width/2, height/2), new PVector(5, 0));
 }
 
 void updateButtons(){
@@ -40,6 +41,8 @@ void updateButtons(){
     Buttons b = buttons.get(i);
     b.update();
   }
+  t.drawMe();
+  t.update();
 }
 
 void createConveyorBelt() {
