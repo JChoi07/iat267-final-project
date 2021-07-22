@@ -4,9 +4,7 @@ class ConveyorBeltLines extends Object {
 
   ConveyorBeltLines(float x, float y, float xSpd, float ySpd) {
     super(x, y, xSpd, ySpd);
-    xSpd = 3;
     diameter = new PVector(5, 80);
-    vel = new PVector(-3, 0);
   }
 
   void render() {
@@ -20,6 +18,7 @@ class ConveyorBeltLines extends Object {
   
   void animate(){
     pos.add(vel); 
+    println("working");
   }
   
   void update(){
