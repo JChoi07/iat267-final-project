@@ -26,6 +26,6 @@ class ConveyorBeltLines extends Object {
   void update(){
     render(); 
     animate();
-    println(pos.x);
+    //println(pos.x);
   }
 }

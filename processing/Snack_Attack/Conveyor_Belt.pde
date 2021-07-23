@@ -21,11 +21,11 @@ class ConveyorBelt extends Object {
     popMatrix();
   }
  
-  void setUpLines() {
-    for(int i = 0; i<25; i++){
-      cbLines.add(new ConveyorBeltLines(0 + (100 * i), pos.y, 0, 0));
-   }
-  }
+  //void setUpLines() {
+  //  for(int i = 0; i<25; i++){
+  //    cbLines.add(new ConveyorBeltLines(0 + (100 * i), pos.y, 0, 0));
+  // }
+  //}
 
   void animateLines() {
    for(int i = 0; i<cbLines.size(); i++){
