@@ -12,5 +12,6 @@ class Object {
   }
 
   void update() {
+    pos.add(vel);
   }
 }

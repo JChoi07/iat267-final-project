@@ -19,18 +19,24 @@ class Player extends Chef {
   void keyPressed() {
     if (key == 'a' || key == 'A') {
       left = true;
+      println("left is " + left);
     } else if (key == 's' || key == 'S') {
       down = true;
+      println("right is " + right);
     } else if (key == 'w' || key == 'W') {
       up = true;
+      println("up is " + up);
     } else if (key == 'd' || key == 'D') {
       right = true;
-    } else {
-      left = false;
-      down = false;
-      up = false;
-      right = false;
+      println("down is " + down);
     }
+  }
+
+  void keyReleased() {
+    left = false;
+    down = false;
+    up = false;
+    right = false;
   }
 
   void stateUpdate() {
