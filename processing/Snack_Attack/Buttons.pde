@@ -4,6 +4,8 @@ class Buttons extends Object {
   color buttonReflection = color(219, 215, 215);
   boolean state;
   PVector buttonDiameter, buttonReflectionDiameter;
+  
+  boolean downArrowTrue;
 
   Buttons(float x, float y, float xSpd, float ySpd) {
     super(x, y, xSpd, ySpd);
@@ -26,6 +28,7 @@ class Buttons extends Object {
     fill(buttonReflection);
     noStroke();
     rect(-5, buttonDiameter.y/2 - 10, buttonReflectionDiameter.x, buttonReflectionDiameter.y, 0, 0, 10, 0);
+
     popMatrix();
   }
   

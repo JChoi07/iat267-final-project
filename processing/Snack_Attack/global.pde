@@ -1,4 +1,4 @@
-PImage gameBg, cashScore;
+PImage gameBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 int gameState=1;
 int gameSpeed = -3;
 int startPage=0;
@@ -17,6 +17,14 @@ ArrayList<ConveyorBeltLines> cbLines = new ArrayList<ConveyorBeltLines>();
 ConveyorBeltLines line;
 //Buttons button;
 
+void loadAssets() {
+  gameBg = loadImage("game-background.jpg");
+  chefSprite = loadImage("chef-sprite.png");
+  cashScore = loadImage("cash-bill.jpg");
+  upArrow = loadImage("data/img/UpArrow.png");
+  downArrow = loadImage("data/img/DownArrow.png");
+  leftArrow = loadImage("data/img/LeftArrow.png");
+  rightArrow = loadImage("data/img/RightArrow.png");
 
 /*======================
  GAME STATES
@@ -43,6 +51,27 @@ void createButtons() {
   //button = new Buttons(-5, 620, 0, 0);
   for (int i = 0; i < 4; i++) {
     buttons.add(new Buttons(-5, 620 + (i*110), 0, 0));
+  }
+}
+
+void updateButtons(){
+  for (int i = 0; i < buttons.size(); i++)  {
+    Buttons b = buttons.get(i);
+    b.update();
+    
+    //draw arrows on buttons based on order of arraylist
+    if (i == 0)  {
+       image(upArrow, b.pos.x + 25, 620);
+    }
+    if (i == 1)  {
+       image(leftArrow, b.pos.x + 25, 730);
+    }
+    if (i == 2)  {
+       image(rightArrow, b.pos.x + 25, 840);
+    }
+    if (i == 3)  {
+       image(downArrow, b.pos.x + 25, 950);
+    }
   }
 }
 
