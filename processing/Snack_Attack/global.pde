@@ -1,6 +1,6 @@
 PImage gameBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 int gameState=1;
-int gameSpeed = -3;
+int gameSpeed = -20;
 int startPage=0;
 int gameUI=1;
 int w=200;
@@ -8,9 +8,16 @@ int counter = 0;
 int x, y;
 PImage chefSprite;
 Score score;
+Char character;
+
+int upBelt = 630;
+int rightBelt = 740;
+int leftBelt = 850;
+int downBelt = 960;
 
 ArrayList<Chef> bgChefs = new ArrayList<Chef>();
 Player player;
+ArrayList<Food> foods = new ArrayList<Food>();
 ArrayList<Buttons> buttons = new ArrayList<Buttons>();
 ArrayList<ConveyorBelt> cBelt = new ArrayList<ConveyorBelt>();
 ArrayList<ConveyorBeltLines> cbLines = new ArrayList<ConveyorBeltLines>();
@@ -76,8 +83,11 @@ void updateButtons(){
 }
 
 void createConveyorBelt() {
-  for (int i = 0; i < 4; i++) {
-    cBelt.add(new ConveyorBelt(0, 630 + (i*110), 0, 0));
+  for (int i = 0; i < 1; i++) {
+    cBelt.add(new ConveyorBelt(0, upBelt, 0, 0));
+    cBelt.add(new ConveyorBelt(0, rightBelt, 0, 0));
+    cBelt.add(new ConveyorBelt(0, leftBelt, 0, 0));
+    cBelt.add(new ConveyorBelt(0, downBelt, 0, 0));
   }
 }
 
@@ -96,6 +106,20 @@ void setUpLines() {
     cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 330, gameSpeed, 0));
   }
 }
+
+void createFood() {
+  for (int i = 0; i < 10; i++) {
+    int randomY = (int) random(0, 4);
+
+    int prevRandomY = randomY;
+    if (prevRandomY == randomY) {
+      randomY = (int) random(0, 4);
+    }
+
+    foods.add(new Food(width + 40 + (i * 100 * (int)random(1, 3)), 630 + (randomY * 110), gameSpeed, 0));
+  }
+}
+
 
 /*======================
  UPDATE OBJECTS
@@ -129,6 +153,22 @@ void animateLines() {
   }
 }
 
+void updateFood() {
+  for (int i = 0; i<foods.size(); i++) {                                       //animate movement
+    Food foodItem = foods.get(i);
+    foodItem.update();
+
+    if (foodItem.pos.x < -100) {
+      foods.remove(i);
+    }
+
+    if (foods.size() < 10) {
+      int randomY = (int) random(0, 4);
+      foods.add(new Food(width - 15 + (i * 100 * (int)random(1, 3)), 630 + (randomY * 110), gameSpeed, 0));
+    }
+  }
+}
+
 /*======================
  LOAD ASSETS
  =======================*/
@@ -139,6 +179,7 @@ void loadAssets() {
   chefSprite = loadImage("chef-sprite.png");
 
   player = new Player(width/2, height/2, 0, 0, 1);
+  character = new Char(width/2, height/2, 0, 0);
 
   score = new Score();
 
@@ -148,6 +189,7 @@ void loadAssets() {
   createConveyorBelt();
   createButtons();
   setUpLines();
+  createFood();
 }
 
 /*======================
@@ -163,6 +205,8 @@ void updateGameUI() {
   updateButtons();
   updateBgChefs();
   player.update();
+  character.update();
+  updateFood();
   //standBy();
 }
 
