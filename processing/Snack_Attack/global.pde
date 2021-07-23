@@ -24,15 +24,6 @@ ArrayList<ConveyorBeltLines> cbLines = new ArrayList<ConveyorBeltLines>();
 ConveyorBeltLines line;
 //Buttons button;
 
-void loadAssets() {
-  gameBg = loadImage("game-background.jpg");
-  chefSprite = loadImage("chef-sprite.png");
-  cashScore = loadImage("cash-bill.jpg");
-  upArrow = loadImage("data/img/UpArrow.png");
-  downArrow = loadImage("data/img/DownArrow.png");
-  leftArrow = loadImage("data/img/LeftArrow.png");
-  rightArrow = loadImage("data/img/RightArrow.png");
-
 /*======================
  GAME STATES
  =======================*/
@@ -58,27 +49,6 @@ void createButtons() {
   //button = new Buttons(-5, 620, 0, 0);
   for (int i = 0; i < 4; i++) {
     buttons.add(new Buttons(-5, 620 + (i*110), 0, 0));
-  }
-}
-
-void updateButtons(){
-  for (int i = 0; i < buttons.size(); i++)  {
-    Buttons b = buttons.get(i);
-    b.update();
-    
-    //draw arrows on buttons based on order of arraylist
-    if (i == 0)  {
-       image(upArrow, b.pos.x + 25, 620);
-    }
-    if (i == 1)  {
-       image(leftArrow, b.pos.x + 25, 730);
-    }
-    if (i == 2)  {
-       image(rightArrow, b.pos.x + 25, 840);
-    }
-    if (i == 3)  {
-       image(downArrow, b.pos.x + 25, 950);
-    }
   }
 }
 
@@ -124,13 +94,27 @@ void createFood() {
 /*======================
  UPDATE OBJECTS
  ========================*/
-
-void updateButtons() {
-  for (int i = 0; i < buttons.size(); i++) {
+void updateButtons(){
+  for (int i = 0; i < buttons.size(); i++)  {
     Buttons b = buttons.get(i);
     b.update();
+    
+    //draw arrows on buttons based on order of arraylist
+    if (i == 0)  {
+       image(upArrow, b.pos.x + 35, 624);
+    }
+    if (i == 1)  {
+       image(leftArrow, b.pos.x + 32, 734);
+    }
+    if (i == 2)  {
+       image(rightArrow, b.pos.x + 35, 844);
+    }
+    if (i == 3)  {
+       image(downArrow, b.pos.x + 35, 955);
+    }
   }
 }
+
 
 void updateBgChefs() {
   for (int i = 0; i < bgChefs.size(); i++) { 
@@ -177,6 +161,10 @@ void loadAssets() {
   gameBg = loadImage("game-background.jpg");
   cashScore = loadImage("cash-bill.jpg");
   chefSprite = loadImage("chef-sprite.png");
+  upArrow = loadImage("data/img/UpArrow.png");
+  downArrow = loadImage("data/img/DownArrow.png");
+  leftArrow = loadImage("data/img/LeftArrow.png");
+  rightArrow = loadImage("data/img/RightArrow.png");
 
   player = new Player(width/2, height/2, 0, 0, 1);
   character = new Char(width/2, height/2, 0, 0);
