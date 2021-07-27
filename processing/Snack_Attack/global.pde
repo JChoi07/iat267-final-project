@@ -1,11 +1,14 @@
+//Initialize global variables
 PImage gameBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
+boolean up, right, left, down;
 int gameState=1;
-int gameSpeed = -3;
+int gameSpeed = -5;
 int startPage=0;
 int gameUI=1;
 int w=200;
 int counter = 0;
 int x, y;
+int value = -20;
 PImage chefSprite;
 Score score;
 Char character;
@@ -15,6 +18,18 @@ int rightBelt = 740;
 int leftBelt = 850;
 int downBelt = 960;
 
+//Initialize sounds/minim
+import ddf.minim.spi.*;
+import ddf.minim.signals.*;
+import ddf.minim.*;
+Minim m;
+
+final String SONG1 = ("music/club-penguin-pizza-parlor2.mp3");
+final String SONG2 = ("music/Stardust Speedway Zone Act 1 - Sonic Mania [OST].mp3");
+AudioPlayer song1, song2;
+
+
+//Initialize classes and arrays
 ArrayList<Chef> bgChefs = new ArrayList<Chef>();
 Player player;
 ArrayList<Food> foods = new ArrayList<Food>();
@@ -69,11 +84,11 @@ void createBgChefs() {
 }
 
 void setUpLines() {
-  for (int i = 0; i<19; i++) {                                                  //set up conveyor belt lines for every belt
-    cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630, gameSpeed, 0));
-    cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 110, gameSpeed, 0));
-    cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 220, gameSpeed, 0));
-    cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 330, gameSpeed, 0));
+  for (int i = 0; i<14; i++) {                                                  //set up conveyor belt lines for every belt
+    cbLines.add(new ConveyorBeltLines(280 + (140 * i), 630, gameSpeed, 0));
+    cbLines.add(new ConveyorBeltLines(280 + (140 * i), 630 + 110, gameSpeed, 0));
+    cbLines.add(new ConveyorBeltLines(280 + (140 * i), 630 + 220, gameSpeed, 0));
+    cbLines.add(new ConveyorBeltLines(280 + (140 * i), 630 + 330, gameSpeed, 0));
   }
 }
 
@@ -86,7 +101,7 @@ void createFood() {
       randomY = (int) random(0, 4);
     }
 
-    foods.add(new Food(width + 40 + (i * 100 * (int)random(1, 3)), 630 + (randomY * 110), gameSpeed, 0));
+    foods.add(new Food(width + 65 + (i * 140 * (int)random(1, 3)), 625 + (randomY * 110), gameSpeed, 0));
   }
 }
 
@@ -148,7 +163,7 @@ void updateFood() {
 
     if (foods.size() < 10) {
       int randomY = (int) random(0, 4);
-      foods.add(new Food(width - 15 + (i * 100 * (int)random(1, 3)), 630 + (randomY * 110), gameSpeed, 0));
+      foods.add(new Food(width + 65 + (i * 140 * (int)random(1, 3)), 625 + (randomY * 110), gameSpeed, 0));
     }
   }
 }
@@ -178,6 +193,10 @@ void loadAssets() {
   createButtons();
   setUpLines();
   createFood();
+  
+  m = new Minim(this);
+  song1 = m.loadFile(SONG1);
+  song2 = m.loadFile(SONG2);
 }
 
 /*======================
@@ -195,7 +214,10 @@ void updateGameUI() {
   player.update();
   character.update();
   updateFood();
-  standBy();
+  volume();
+  //songPlayer();
+  //song1Play();
+  //standBy();
 }
 
 /*======================
@@ -221,6 +243,66 @@ void standBy() {
   copy(chefSprite, x, y, w, w, 0, 0, w, w);
   popMatrix();
 }
+
+
+/*======================
+ SOUND/MUSIC SETTINGS
+ ========================*/
+void playBGM (String file) {
+  AudioPlayer sound = null;
+
+  if (file == SONG1) {
+    sound = song1;
+  } else if (file == SONG2) {
+    sound = song2;
+  }
+  
+  sound.rewind();
+  sound.play();
+  sound.loop();
+}
+
+void volume() {
+  song1.setGain(value);
+  song2.setGain(value);
+}
+  
+  
+  
+/*======================
+ CONTROLS
+ ========================*/
+void keyPressed() {
+    if (key == 'a' || key == 'A') {
+      left = true;
+      println("left is " + left);
+      gameState = GAMEPLAY_SCREEN_STATE;
+      song2.pause();
+      playBGM(SONG1);
+    } else if (key == 's' || key == 'S') {
+      down = true;
+      value -= 1;
+      println("right is " + down);
+    } else if (key == 'w' || key == 'W') {
+      up = true;
+      println("up is " + up);
+      value += 1;
+    } else if (key == 'd' || key == 'D') {
+      right = true;
+      println("right is " + right);
+      gameState = HOME_SCREEN_STATE;
+      song1.pause();
+      playBGM(SONG2);
+    }
+  }
+
+  void keyReleased() {
+    left = false;
+    down = false;
+    up = false;
+    right = false;
+  }
+  
 
 //void death() {
 //  x = (counter % 2) * w;
