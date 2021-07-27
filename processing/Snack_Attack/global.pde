@@ -1,6 +1,6 @@
 PImage gameBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 int gameState=1;
-int gameSpeed = -20;
+int gameSpeed = -5;
 int startPage=0;
 int gameUI=1;
 int w=200;
@@ -69,11 +69,11 @@ void createBgChefs() {
 }
 
 void setUpLines() {
-  for (int i = 0; i<19; i++) {                                                  //set up conveyor belt lines for every belt
-    cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630, gameSpeed, 0));
-    cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 110, gameSpeed, 0));
-    cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 220, gameSpeed, 0));
-    cbLines.add(new ConveyorBeltLines(50 + (100 * i), 630 + 330, gameSpeed, 0));
+  for (int i = 0; i<14; i++) {                                                  //set up conveyor belt lines for every belt
+    cbLines.add(new ConveyorBeltLines(280 + (140 * i), 630, gameSpeed, 0));
+    cbLines.add(new ConveyorBeltLines(280 + (140 * i), 630 + 110, gameSpeed, 0));
+    cbLines.add(new ConveyorBeltLines(280 + (140 * i), 630 + 220, gameSpeed, 0));
+    cbLines.add(new ConveyorBeltLines(280 + (140 * i), 630 + 330, gameSpeed, 0));
   }
 }
 
@@ -86,7 +86,7 @@ void createFood() {
       randomY = (int) random(0, 4);
     }
 
-    foods.add(new Food(width + 40 + (i * 100 * (int)random(1, 3)), 630 + (randomY * 110), gameSpeed, 0));
+    foods.add(new Food(width + 65 + (i * 140 * (int)random(1, 3)), 625 + (randomY * 110), gameSpeed, 0));
   }
 }
 
@@ -148,7 +148,7 @@ void updateFood() {
 
     if (foods.size() < 10) {
       int randomY = (int) random(0, 4);
-      foods.add(new Food(width - 15 + (i * 100 * (int)random(1, 3)), 630 + (randomY * 110), gameSpeed, 0));
+      foods.add(new Food(width + 65 + (i * 140 * (int)random(1, 3)), 625 + (randomY * 110), gameSpeed, 0));
     }
   }
 }
