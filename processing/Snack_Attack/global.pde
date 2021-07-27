@@ -1,6 +1,6 @@
 PImage gameBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 int gameState=1;
-int gameSpeed = -20;
+int gameSpeed = -3;
 int startPage=0;
 int gameUI=1;
 int w=200;
@@ -195,7 +195,7 @@ void updateGameUI() {
   player.update();
   character.update();
   updateFood();
-  //standBy();
+  standBy();
 }
 
 /*======================
