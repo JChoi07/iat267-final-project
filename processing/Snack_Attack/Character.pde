@@ -18,23 +18,6 @@ class Char extends Object {
     frameUpdate();
   }
 
-  void keyPressed() {
-    if (key == 'a' || key == 'A') {
-      left = true;
-    } else if (key == 's' || key == 'S') {
-      down = true;
-    } else if (key == 'w' || key == 'W') {
-      up = true;
-    } else if (key == 'd' || key == 'D') {
-      right = true;
-    } else {
-      left = false;
-      down = false;
-      up = false;
-      right = false;
-    }
-  }
-
   void stateUpdate() {
     if (left) {
       state = PUNCHING_STATE;

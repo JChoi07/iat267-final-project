@@ -78,8 +78,8 @@ void createConveyorBelt() {
 
 void createBgChefs() {
   for (int i = 0; i < 1; i++) {
-    bgChefs.add(new Chef(1650, 380, 0, 0, .7));
-    bgChefs.add(new Chef(370, 420, 0, 0, .7));
+    bgChefs.add(new Chef(1500, 510, 5, 0, .7));
+    bgChefs.add(new Chef(370, 490, -5, 0, .7));
   }
 }
 
@@ -109,23 +109,23 @@ void createFood() {
 /*======================
  UPDATE OBJECTS
  ========================*/
-void updateButtons(){
-  for (int i = 0; i < buttons.size(); i++)  {
+void updateButtons() {
+  for (int i = 0; i < buttons.size(); i++) {
     Buttons b = buttons.get(i);
     b.update();
-    
+
     //draw arrows on buttons based on order of arraylist
-    if (i == 0)  {
-       image(upArrow, b.pos.x + 35, 624);
+    if (i == 0) {
+      image(upArrow, b.pos.x + 35, 624);
     }
-    if (i == 1)  {
-       image(leftArrow, b.pos.x + 32, 734);
+    if (i == 1) {
+      image(leftArrow, b.pos.x + 32, 734);
     }
-    if (i == 2)  {
-       image(rightArrow, b.pos.x + 35, 844);
+    if (i == 2) {
+      image(rightArrow, b.pos.x + 35, 844);
     }
-    if (i == 3)  {
-       image(downArrow, b.pos.x + 35, 955);
+    if (i == 3) {
+      image(downArrow, b.pos.x + 35, 955);
     }
   }
 }
@@ -134,7 +134,7 @@ void updateButtons(){
 void updateBgChefs() {
   for (int i = 0; i < bgChefs.size(); i++) { 
     Chef backgroundChefs = bgChefs.get(i);
-    backgroundChefs.update();
+    backgroundChefs.render();
   }
 }
 
@@ -181,8 +181,7 @@ void loadAssets() {
   leftArrow = loadImage("data/img/LeftArrow.png");
   rightArrow = loadImage("data/img/RightArrow.png");
 
-  player = new Player(width/2, height/2, 0, 0, 1);
-  character = new Char(width/2, height/2, 0, 0);
+  player = new Player(width/2, height/2.75, 0, 0, 1.5);
 
   score = new Score();
 
@@ -193,7 +192,7 @@ void loadAssets() {
   createButtons();
   setUpLines();
   createFood();
-  
+
   m = new Minim(this);
   song1 = m.loadFile(SONG1);
   song2 = m.loadFile(SONG2);
@@ -204,6 +203,7 @@ void loadAssets() {
  ========================*/
 
 void updateGameUI() {
+  imageMode(CORNER);
   image(gameBg, 0, 0);
   image(cashScore, 60, 30);
   score.render();
@@ -212,7 +212,6 @@ void updateGameUI() {
   updateButtons();
   updateBgChefs();
   player.update();
-  character.update();
   updateFood();
   volume();
   //songPlayer();
@@ -256,7 +255,7 @@ void playBGM (String file) {
   } else if (file == SONG2) {
     sound = song2;
   }
-  
+
   sound.rewind();
   sound.play();
   sound.loop();
@@ -266,54 +265,35 @@ void volume() {
   song1.setGain(value);
   song2.setGain(value);
 }
-  
-  
-  
+
+
+
 /*======================
  CONTROLS
  ========================*/
 void keyPressed() {
-    if (key == 'a' || key == 'A') {
-      left = true;
-      println("left is " + left);
-      gameState = GAMEPLAY_SCREEN_STATE;
-      song2.pause();
-      playBGM(SONG1);
-    } else if (key == 's' || key == 'S') {
-      down = true;
-      value -= 1;
-      println("right is " + down);
-    } else if (key == 'w' || key == 'W') {
-      up = true;
-      println("up is " + up);
-      value += 1;
-    } else if (key == 'd' || key == 'D') {
-      right = true;
-      println("right is " + right);
-      gameState = HOME_SCREEN_STATE;
-      song1.pause();
-      playBGM(SONG2);
-    }
+  if (key == 'a' || key == 'A') {
+    left = true;
+    //gameState = GAMEPLAY_SCREEN_STATE;
+    song2.pause();
+    playBGM(SONG1);
+  } else if (key == 's' || key == 'S') {
+    down = true;
+    value -= 1;
+  } else if (key == 'w' || key == 'W') {
+    up = true;
+    value += 1;
+  } else if (key == 'd' || key == 'D') {
+    right = true;
+    //gameState = HOME_SCREEN_STATE;
+    song1.pause();
+    playBGM(SONG2);
   }
+}
 
-  void keyReleased() {
-    left = false;
-    down = false;
-    up = false;
-    right = false;
-  }
-  
-
-//void death() {
-//  x = (counter % 2) * w;
-//  y = 800;
-//  copy(chefSprite, x, y, w, w, 0, 0, w, w);
-//  counter = counter + 1;
-//}
-
-//void victory() {
-//  x = 2*w;
-//  y = 801;
-//  copy(chefSprite, x, y, w, w, 0, 0, w, w);
-//  counter = counter + 1;
-//}
+void keyReleased() {
+  left = false;
+  down = false;
+  up = false;
+  right = false;
+}
