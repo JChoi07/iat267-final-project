@@ -2,7 +2,7 @@ void setup() {
   size(1920, 1080);
   loadAssets();
   //createSerialConnection();
-  playBGM(SONG2);
+  playBGM(SONG1);
 }
 
 private static final int HELP_SCREEN_STATE = -1;
@@ -24,6 +24,6 @@ void draw() {
   
   //run arduino interactions
   //readSerialConnection();
-  //touchInput();
+  touchInput();
   volumeControl();
 }
