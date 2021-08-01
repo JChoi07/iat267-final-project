@@ -1,10 +1,6 @@
-/*
-  I2C-Multi-Touch-Sensor-Grove
-  modified on 18 oct 2020
-  by Amir Mohammad Shojaee @ Electropeak
-  https://electropeak.com/learn/
+/*REFERENCES: 
+ - I2C Multi Touch Grove Sensor source code from: https://electropeak.com/learn/interfacing-grove-12-key-multi-touch-sensor-with-arduino/
 
-  Based on wiki.seeedstudio.com Example
 */
 
 // include our Grove I2C touch sensor library
@@ -25,8 +21,15 @@ int ledBlue = 8;
 int ledRed = 9;
 int ledGreen = 10;
 int ledYellow = 11;
+String touchSensorKey;
 
 int touchSensorValue = 13;
+int buttonPin = 7;
+int potPin = 0;
+
+int potVal;
+int buttonState = 0;
+
 
 
 void setup()  {    
@@ -39,12 +42,20 @@ void setup()  {
     pinMode(ledRed, OUTPUT);
     pinMode(ledGreen, OUTPUT);
     pinMode(ledYellow, OUTPUT);
+
+    pinMode(buttonPin, INPUT);
   }
   
 void loop() {     
+ //I2C Multi Touch Grove Sensor variables
  unsigned char MPR_Query=0;
  unsigned long currentMillis = millis();
- 
+
+ //hold slider sensor (potentiometer) analog reading and button digital reading within variables
+ potVal = analogRead(potPin)/4;
+ buttonState = digitalRead(buttonPin);
+
+ //get touchsensor state that can be checked
  if(currentMillis - previousMillis > interval)  {
     previousMillis = currentMillis;
     touchsensor.getTouchState();
@@ -52,51 +63,16 @@ void loop() {
 
  for (int i=0;i<12;i++) {
     if (touchsensor.touched&(1<<i))  {             //check if touch sensor is being touched
-      Serial.print("pin ");
-      Serial.print(i);
-      Serial.println(" was  touched");
+//      Serial.print("pin ");
+//      Serial.print(i);
+//      Serial.println(" was  touched");
 //      delay(100);
       touchSensorValue = i;                        //set touchSensorValue variable to the touch pad number that is being interacted with
-      
-//
-//      switch(touchSensorValue)  {                //turn on LED's and set touch sensor val based on which sensor is touched
-//        case 8:                        
-//        digitalWrite(ledBlue, HIGH);
-//        digitalWrite(ledRed, LOW);
-//        digitalWrite(ledGreen, LOW);
-//        digitalWrite(ledYellow, LOW);
-//        Serial.println(touchSensorValue);
-//        break;
-//      case 9:
-//        digitalWrite(ledBlue, LOW);
-//        digitalWrite(ledRed, HIGH);
-//        digitalWrite(ledGreen, LOW);
-//        digitalWrite(ledYellow, LOW);
-//        Serial.println(touchSensorValue);
-//        break;
-//      case 10:
-//        digitalWrite(ledBlue, LOW);
-//        digitalWrite(ledRed, LOW);
-//        digitalWrite(ledGreen, HIGH);
-//        digitalWrite(ledYellow, LOW);
-//        Serial.println(touchSensorValue);
-//        break;
-//      case 11:
-//        digitalWrite(ledBlue, LOW);
-//        digitalWrite(ledRed, LOW);
-//        digitalWrite(ledGreen, LOW);
-//        digitalWrite(ledYellow, HIGH);
-//        Serial.println(touchSensorValue);
-//        break;
-//    
-//      default:
-//        break;
-//      }
-   }
 
     //Blue LED
     if (touchsensor.touched&(1<<i) && touchSensorValue == 8)  {     //turn on Blue LED's if touch sensors not being interacted with
         digitalWrite(ledBlue, HIGH);
+        touchSensorKey = "W";
     }
     else if (!touchsensor.touched&(1<<i) && touchSensorValue != 8)  {    //turn off Blue LED's if touch sensors not being interacted with
         digitalWrite(ledBlue, LOW);
@@ -105,6 +81,7 @@ void loop() {
     //Red LED
     if (touchsensor.touched&(1<<i) && touchSensorValue == 9)  {    //turn on Red LED's if touch sensors not being interacted with
         digitalWrite(ledRed, HIGH);
+        touchSensorKey = "A";
     }
     else if (!touchsensor.touched&(1<<i) && touchSensorValue != 9)  {     //turn off Red LED's if touch sensors not being interacted with
         digitalWrite(ledRed, LOW);
@@ -113,6 +90,7 @@ void loop() {
     //Green LED
     if (touchsensor.touched&(1<<i) && touchSensorValue == 10)  {     //turn on Green LED's if touch sensors not being interacted with
         digitalWrite(ledGreen, HIGH);
+        touchSensorKey = "S";
     }
     else if (!touchsensor.touched&(1<<i) && touchSensorValue != 10)  {    //turn off Green LED if touch sensors not being interacted with
         digitalWrite(ledGreen, LOW);
@@ -121,19 +99,41 @@ void loop() {
     //Yellow LED
     if (touchsensor.touched&(1<<i) && touchSensorValue == 11)  {     //turn on Yellow LED if touch sensors not being interacted with
         digitalWrite(ledYellow, HIGH);
+        touchSensorKey = "D";
     }
     else if (!touchsensor.touched&(1<<i) && touchSensorValue != 11)  {     //turn off Yellow LED if touch sensors not being interacted with
         digitalWrite(ledYellow, LOW);
     }
 
    
-   //turn off LED's and set touch sensor value if touch sensors not being interacted with
+   //Turn off LED's and set touch sensor value if touch sensors not being interacted with
    if (!touchsensor.touched&(1<<i))  {     
-//      digitalWrite(ledBlue, LOW);
-//      digitalWrite(ledRed, LOW);
-//      digitalWrite(ledGreen, LOW);
-//      digitalWrite(ledYellow, LOW);
       touchSensorValue = 13;
+      touchSensorKey = "Z";
    }
  }
+
+  //Serial monitor println control
+  //start of 'a' packet
+  Serial.print("a");
+  Serial.print(touchSensorValue);
+  Serial.print("a");
+  Serial.println(); //end of 'a' packet
+
+  //start of 'b' packet
+  Serial.print("b"); //character 'b' will delimit the reading from the slider sensor
+  Serial.print(potVal);
+  Serial.print("b");
+  Serial.println(); //end of 'b' packet
+
+  //start of 'c' packet
+  Serial.print("c"); //character 'c' will delimit the reading from the slider sensor
+  Serial.print(buttonState);
+  Serial.print("c");
+  Serial.println(); //end of 'c' packet
+  
+  Serial.print("&"); //denotes end of readings from both sensors
+
+  //print carriage return and newline
+  Serial.println(); 
 }

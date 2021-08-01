@@ -1,4 +1,5 @@
 //Initialize global variables
+//Initialize global variables
 PImage gameBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 boolean up, right, left, down;
 int gameState=1;
@@ -16,7 +17,6 @@ int upBelt = 630;
 int rightBelt = 740;
 int leftBelt = 850;
 int downBelt = 960;
-int comboCounter = 1;
 
 //Initialize Arduino serial data and variables
 import processing.serial.*;
@@ -56,6 +56,7 @@ ConveyorBeltLines line;
 
 void gameStart() {
   updateGameUI();
+  score.render();
   player.render();
 }
 
@@ -144,17 +145,17 @@ void createButtons() {
 
 void createConveyorBelt() {
   for (int i = 0; i < 1; i++) {
-    cBelt.add(new ConveyorBelt(138, upBelt, 0, 0));
-    cBelt.add(new ConveyorBelt(138, rightBelt, 0, 0));
-    cBelt.add(new ConveyorBelt(138, leftBelt, 0, 0));
-    cBelt.add(new ConveyorBelt(138, downBelt, 0, 0));
+    cBelt.add(new ConveyorBelt(0, upBelt, 0, 0));
+    cBelt.add(new ConveyorBelt(0, rightBelt, 0, 0));
+    cBelt.add(new ConveyorBelt(0, leftBelt, 0, 0));
+    cBelt.add(new ConveyorBelt(0, downBelt, 0, 0));
   }
 }
 
 void createBgChefs() {
   for (int i = 0; i < 1; i++) {
-    bgChefs.add(new Chef(1500, 510, 5, 0, .7));
-    bgChefs.add(new Chef(370, 490, -5, 0, .7));
+    bgChefs.add(new Chef(1650, 380, 0, 0, .7));
+    bgChefs.add(new Chef(370, 420, 0, 0, .7));
   }
 }
 
@@ -184,23 +185,23 @@ void createFood() {
 /*======================
  UPDATE OBJECTS
  ========================*/
-void updateButtons() {
-  for (int i = 0; i < buttons.size(); i++) {
+void updateButtons(){
+  for (int i = 0; i < buttons.size(); i++)  {
     Buttons b = buttons.get(i);
     b.update();
-
+    
     //draw arrows on buttons based on order of arraylist
-    if (i == 0) {
-      image(upArrow, b.pos.x + 35, 624);
+    if (i == 0)  {
+       image(upArrow, b.pos.x + 35, 624);
     }
-    if (i == 1) {
-      image(leftArrow, b.pos.x + 32, 734);
+    if (i == 1)  {
+       image(leftArrow, b.pos.x + 32, 734);
     }
-    if (i == 2) {
-      image(rightArrow, b.pos.x + 35, 844);
+    if (i == 2)  {
+       image(rightArrow, b.pos.x + 35, 844);
     }
-    if (i == 3) {
-      image(downArrow, b.pos.x + 35, 955);
+    if (i == 3)  {
+       image(downArrow, b.pos.x + 35, 955);
     }
   }
 }
@@ -209,7 +210,7 @@ void updateButtons() {
 void updateBgChefs() {
   for (int i = 0; i < bgChefs.size(); i++) { 
     Chef backgroundChefs = bgChefs.get(i);
-    backgroundChefs.render();
+    backgroundChefs.update();
   }
 }
 
@@ -234,8 +235,6 @@ void updateFood() {
 
     if (foodItem.pos.x < -100) {
       foods.remove(i);
-      score.updateScore(-20); //decrease score if food is missed
-      comboCounter = 1;
     }
 
     if (foods.size() < 10) {
@@ -243,90 +242,6 @@ void updateFood() {
       foods.add(new Food(width + 65 + (i * 140 * (int)random(1, 3)), 625 + (randomY * 110), gameSpeed, 0));
     }
   }
-}
-
-void checkButtonCollision() {
-   for (int i = 0; i < buttons.size(); i++) {
-     Buttons b = buttons.get(i);
-     
-     for (int f = 0; f<foods.size(); f++) {                                       //animate movement
-       Food foodItem = foods.get(f);
-       
-       //increase score if food is hit
-       if (foodItem.hitObject(b) == true && i == 0 && up == true) {
-         comboCounter += 1;
-         score.updateScore(20*comboCounter); 
-         foods.remove(f);
-       }
-       else if (foodItem.hitObject(b) == true && i == 1 && left == true) {
-         comboCounter += 1;
-         score.updateScore(20*comboCounter);
-         foods.remove(f);
-       }
-       else if (foodItem.hitObject(b) == true && i == 2 && right == true) {
-         comboCounter += 1;
-         score.updateScore(20*comboCounter);
-         foods.remove(f);
-       }
-       else if (foodItem.hitObject(b) == true && i == 3 && down == true) {
-         comboCounter += 1;
-         score.updateScore(20*comboCounter); 
-         foods.remove(f);
-       }
-       
-       ////decrease score if food is missed
-       //if (foodItem.hitObject(b) == false && i == 0 && up == true) {
-       //  comboCounter = 0; 
-       //}
-       //else if (foodItem.hitObject(b) == false && i == 1 && left == true) {
-       //  score.updateScore(-20);
-       //}
-       //else if (foodItem.hitObject(b) == false && i == 2 && right == true) {
-       //  score.updateScore(-20);
-       //}
-       //else if (foodItem.hitObject(b) == false && i == 3 && down == true) {
-       //  score.updateScore(-20); 
-       //}
-     }
-   }
-}
-
-void checkConveyorBeltCollision() {
-  for (int i = 0; i < cBelt.size(); i++) {
-    ConveyorBelt cb = cBelt.get(i);
-    
-    for (int f = 0; f<foods.size(); f++) {                                       //animate movement
-       Food foodItem = foods.get(f);
-       
-       //increase score if food is hit
-       if (foodItem.hitObject(cb) == true && i == 0 && up == true) {
-         comboCounter = 1;
-         score.updateScore(-20); 
-         println("hit");
-       }
-       else if (foodItem.hitObject(cb) == true && i == 1 && left == true) {
-         comboCounter = 1;
-         score.updateScore(-20);
-       }
-       else if (foodItem.hitObject(cb) == true && i == 2 && right == true) {
-         comboCounter = 1;
-         score.updateScore(-20);
-       }
-       else if (foodItem.hitObject(cb) == true && i == 3 && down == true) {
-         comboCounter = 1;
-         score.updateScore(-20); 
-       }
-    }
-  }
-}
-
-void comboScore() {
-  pushStyle();
-  fill(0);
-  if (comboCounter >= 1) {
-    text("Combo: x" + comboCounter, 1600, 75);    //sub title 
-  }
-  popStyle();
 }
 
 /*======================
@@ -342,7 +257,8 @@ void loadAssets() {
   leftArrow = loadImage("data/img/LeftArrow.png");
   rightArrow = loadImage("data/img/RightArrow.png");
 
-  player = new Player(width/2, height/2.75, 0, 0, 1.5);
+  player = new Player(width/2, height/2, 0, 0, 1);
+  character = new Char(width/2, height/2, 0, 0);
 
   score = new Score();
 
@@ -353,7 +269,7 @@ void loadAssets() {
   createButtons();
   setUpLines();
   createFood();
-
+  
   m = new Minim(this);
   song1 = m.loadFile(SONG1);
   song2 = m.loadFile(SONG2);
@@ -364,7 +280,6 @@ void loadAssets() {
  ========================*/
 
 void updateGameUI() {
-  imageMode(CORNER);
   image(gameBg, 0, 0);
   image(cashScore, 60, 30);
   score.render();
@@ -373,8 +288,8 @@ void updateGameUI() {
   updateButtons();
   updateBgChefs();
   player.update();
+  character.update();
   updateFood();
-  comboScore();
   //songPlayer();
   //song1Play();
   //standBy();
@@ -416,7 +331,7 @@ void playBGM (String file) {
   } else if (file == SONG2) {
     sound = song2;
   }
-
+  
   sound.rewind();
   sound.play();
   sound.loop();
@@ -426,8 +341,7 @@ void volumeControl() {
   int volumeValue;
   
   if (sliderSensorValue <= 0){
-    volumeValue = -20
-    ; 
+    volumeValue = -100; 
   }
   else if (sliderSensorValue <= 50) {
     volumeValue = -10; 
@@ -445,7 +359,7 @@ void volumeControl() {
     volumeValue = 30; 
   }
   else {
-    volumeValue = 0;          //set volume default volume
+    volumeValue = 0;  
   }
   
   song1.setGain(volumeValue);
@@ -453,9 +367,9 @@ void volumeControl() {
 }
   
 void touchInput() {
-  //touch sensor cases
   if (touchSensorValue == 8){
     left = true;
+    gameState = GAMEPLAY_SCREEN_STATE;
     println("left");
   }
   else if (touchSensorValue == 9){
@@ -468,21 +382,20 @@ void touchInput() {
   }
   else if (touchSensorValue == 11){
     right = true;
+    gameState = HOME_SCREEN_STATE;
     println("right");
   }
-  else if (touchSensorValue == 13) {
-    left = false;
-    down = false;
-    up = false;
-    right = false;
-  }
-  
-  //button switch cases
-  if (buttonValue == 0) {
+  else if (buttonValue == 0) {
     //do nothing 
   }
   else if (buttonValue == 1) {
     //confirm action
+  }
+  else {
+    left = false;
+    down = false;
+    up = false;
+    right = false;
   }
 }
   
@@ -494,48 +407,42 @@ void keyPressed() {
     if (key == 'a' || key == 'A') {
       left = true;
       println("left is " + left);
-      if (gameState == GAMEPLAY_SCREEN_STATE) {
-        checkButtonCollision();
-        checkConveyorBeltCollision();
-        //score.updateScore(-10);
-      }
-      //gameState = GAMEPLAY_SCREEN_STATE;
-      //song2.pause();
-      //playBGM(SONG1);
+      gameState = GAMEPLAY_SCREEN_STATE;
+      song2.pause();
+      playBGM(SONG1);
     } else if (key == 's' || key == 'S') {
       down = true;
       println("down is " + down);
-      if (gameState == GAMEPLAY_SCREEN_STATE) {
-        checkButtonCollision();
-        checkConveyorBeltCollision();
-        //score.updateScore(-10);
-      }
     } else if (key == 'w' || key == 'W') {
       up = true;
       println("up is " + up);
-      if (gameState == GAMEPLAY_SCREEN_STATE) {
-        checkButtonCollision();
-        checkConveyorBeltCollision();
-        //score.updateScore(-10);
-      }
     } else if (key == 'd' || key == 'D') {
       right = true;
       println("right is " + right);
-      if (gameState == GAMEPLAY_SCREEN_STATE) {
-        checkButtonCollision();
-        checkConveyorBeltCollision();
-        //score.updateScore(-10);
-      }
-      //gameState = HOME_SCREEN_STATE;
-      //song1.pause();
-      //playBGM(SONG2);
+      gameState = HOME_SCREEN_STATE;
+      song1.pause();
+      playBGM(SONG2);
     }
-}
+  }
 
+  void keyReleased() {
+    left = false;
+    down = false;
+    up = false;
+    right = false;
+  }
+  
 
-void keyReleased() {
-  left = false;
-  down = false;
-  up = false;
-  right = false;
-}
+//void death() {
+//  x = (counter % 2) * w;
+//  y = 800;
+//  copy(chefSprite, x, y, w, w, 0, 0, w, w);
+//  counter = counter + 1;
+//}
+
+//void victory() {
+//  x = 2*w;
+//  y = 801;
+//  copy(chefSprite, x, y, w, w, 0, 0, w, w);
+//  counter = counter + 1;
+//}
