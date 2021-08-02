@@ -41,15 +41,11 @@ class Food extends Object {
   }
   
   boolean hitObject(Object o) {
-    if (abs(pos.x - o.pos.x) < (diameter.x/2 + o.diameter.x/2) && abs(pos.y - o.pos.y) < (diameter.y/2 + o.diameter.y/2)) {
-  //    return true;
+    if ((pos.x - o.pos.x) < (diameter.x/2 + o.diameter.x/2) && abs(pos.y - o.pos.y) < (diameter.y/2 + o.diameter.y/2)){
+      return true;
     }
     else {
       return false;
     }
-
-    
-  boolean missObject(Object o) {
-    return abs(pos.x - o.pos.x) > (diameter.x/2 + o.diameter.x/2) && abs(pos.y - o.pos.y) > (diameter.y/2 + o.diameter.y/2);
   }
 }

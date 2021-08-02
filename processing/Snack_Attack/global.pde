@@ -496,8 +496,8 @@ void keyPressed() {
       println("left is " + left);
       if (gameState == GAMEPLAY_SCREEN_STATE) {
         checkButtonCollision();
-        checkConveyorBeltCollision();
-        //score.updateScore(-10);
+        //checkConveyorBeltCollision();
+        score.updateScore(-10);
       }
       //gameState = GAMEPLAY_SCREEN_STATE;
       //song2.pause();
@@ -507,24 +507,24 @@ void keyPressed() {
       println("down is " + down);
       if (gameState == GAMEPLAY_SCREEN_STATE) {
         checkButtonCollision();
-        checkConveyorBeltCollision();
-        //score.updateScore(-10);
+        //checkConveyorBeltCollision();
+        score.updateScore(-10);
       }
     } else if (key == 'w' || key == 'W') {
       up = true;
       println("up is " + up);
       if (gameState == GAMEPLAY_SCREEN_STATE) {
         checkButtonCollision();
-        checkConveyorBeltCollision();
-        //score.updateScore(-10);
+        //checkConveyorBeltCollision();
+        score.updateScore(-10);
       }
     } else if (key == 'd' || key == 'D') {
       right = true;
       println("right is " + right);
       if (gameState == GAMEPLAY_SCREEN_STATE) {
         checkButtonCollision();
-        checkConveyorBeltCollision();
-        //score.updateScore(-10);
+        //checkConveyorBeltCollision();
+        score.updateScore(-10);
       }
       //gameState = HOME_SCREEN_STATE;
       //song1.pause();
