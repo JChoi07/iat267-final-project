@@ -1,8 +1,8 @@
 void setup() {
   size(1920, 1080);
   loadAssets();
-  //createSerialConnection();
-  playBGM(SONG2);
+  createSerialConnection();
+  playBGM(HOME_BGM);
 }
 
 private static final int HELP_SCREEN_STATE = -1;

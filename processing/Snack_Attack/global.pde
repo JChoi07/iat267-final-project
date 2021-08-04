@@ -38,9 +38,10 @@ import ddf.minim.*;
 Minim m;
 
 //game tracks
+final String HOME_BGM = ("music/fibbage-3-lobby-music.mp3");
 final String SONG1 = ("music/club-penguin-pizza-parlor.mp3");
 final String SONG2 = ("music/Stardust Speedway Zone Act 1 - Sonic Mania [OST].mp3");
-AudioPlayer song1, song2;
+AudioPlayer homeBGM, song1, song2;
 
 
 //Initialize classes and arrays
@@ -388,11 +389,27 @@ void comboScore() {
   popStyle();
 }
 
+void homeScreenText() {
+  //main text
+  pushStyle();
+  fill(0);
+  textSize(120);
+  text("Snack Attack", width/2 - 100, height/2 - 50);    //sub title 
+  popStyle();
+  
+  //sub text
+  pushStyle();
+  textSize(24);
+  text("Press the 'A' Button to Start", width/2, height/2 - 100);
+  popStyle();
+}
+
 /*======================
  LOAD ASSETS
  =======================*/
 
 void loadAssets() {
+  homeBg = loadImage("home-background.png");
   gameBg = loadImage("game-background.jpg");
   homeBg = loadImage("home-background.jpg");
   cashScore = loadImage("cash-bill.jpg");
@@ -406,6 +423,7 @@ void loadAssets() {
 
   score = new Score();
 
+  PFont homeFont = loadFont("
   PFont gameFont = loadFont("LoRes12OT-BoldAltOakland-48.vlw");
   textFont(gameFont, 48);
   createBgChefs();
@@ -415,6 +433,7 @@ void loadAssets() {
   createFood();
 
   m = new Minim(this);
+  homeBGM = m.loadFile(HOME_BGM);
   song1 = m.loadFile(SONG1);
   song2 = m.loadFile(SONG2);
 }
@@ -471,9 +490,13 @@ void standBy() {
 void playBGM (String file) {
   AudioPlayer sound = null;
 
-  if (file == SONG1) {
+  if (file == HOME_BGM) {
+    sound = homeBGM;
+  } 
+  else if (file == SONG1) {
     sound = song1;
-  } else if (file == SONG2) {
+  } 
+  else if (file == SONG2) {
     sound = song2;
   }
 
