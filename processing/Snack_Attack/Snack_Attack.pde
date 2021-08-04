@@ -1,7 +1,7 @@
 void setup() {
   size(1920, 1080);
   loadAssets();
-  createSerialConnection();
+  //createSerialConnection();
   playBGM(SONG2);
 }
 
@@ -16,14 +16,15 @@ void draw() {
     gameStart();
     break;
   case HOME_SCREEN_STATE:
+    homeScreen();
     break;
   case HELP_SCREEN_STATE:
-
+    helpScreen();
     break;
   }
-  
+
   //run arduino interactions
-  readSerialConnection();
+  //readSerialConnection();
   touchInput();
   volumeControl();
   //println(up, down, left, right);

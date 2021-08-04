@@ -1,13 +1,16 @@
 //Initialize global variables
-PImage gameBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
+PImage gameBg, homeBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 boolean up, right, left, down;
-int gameState=1;
+int gameState;
 int gameSpeed = -5;
 int startPage=0;
 int gameUI=1;
 int w=200;
 int counter = 0;
 int x, y;
+int blink = 255;
+int blinkSpeed = 20;
+int shakeX, shakeY;
 PImage chefSprite;
 Score score;
 Char character;
@@ -60,6 +63,67 @@ void gameStart() {
 }
 
 void homeScreen() {
+  image(homeBg, 0, 0);
+
+  updateBgChefs();
+  strokeWeight(0);
+  fill(0, 0, 0, 120);
+  rect(0, 0, width, height);
+
+  textAlign(CENTER);
+  fill(255, 255, 255);
+  textSize(120);
+  text("SNACK ATTACK", width/2 + shakeX, height/1.85 - shakeY);
+
+  shakeX += random(-1.5, 1.5);
+  shakeY += random(-1.5, 1.5);
+
+  fill(255, 255, 255, blink);
+  textSize(48);
+  text("Press Switch to Start", width/2, height/1.55);
+
+  //fill(100, 5, 252);
+  //strokeWeight(2);
+  //rectMode(CENTER);
+  //rect(width/2, height/1.3, 200, 60, 5);
+
+  //strokeWeight(0);
+  //fill(255, 255, 255, 200);
+  //rect(width/2 + 92, height/1.3 - 14, 4, 14);
+  //rect(width/2 + 92, height/1.3 + 4, 4, 4);
+  //rectMode(CORNER);
+
+  //textSize(30);
+  //fill(255, 255, 255, blink);
+  //text("HELP", width/2, height/1.28);
+
+  textAlign(LEFT);
+  textSize(16);
+  fill(255, 255, 255);
+  text("Jonathan Choi", 20, height - 45);
+  text("David Baik", 20, height - 25);
+
+  //textAlign(RIGHT);
+  text("IAT 267", 20, 35);
+
+  blink += blinkSpeed;
+
+  if (blink > 255 || blink < 0) {
+    blinkSpeed *= -1;
+  }
+
+  if (keyPressed && key == 'o') {
+    gameState = -1;
+  }
+}
+
+void helpScreen() {
+  background(255);
+  rectMode(CORNER);
+  strokeWeight(0);
+  fill(0, 0, 0, 120);
+  rect(0, 0, width, height);
+  updateButtons();
 }
 
 void gameOver() {
@@ -69,69 +133,70 @@ void gameOver() {
 /*=================================
  ARDUINO + PROCESSING INTERACTIONS
  ==================================*/
+/*
 void createSerialConnection() {
-  println("Available serial ports:");
-  println(Serial.list());
-
-  port = new Serial(this, "COM3", 9600); 
-}
-
-void readSerialConnection() {
-  if (0 < port.available()) { // If data is available to read,
-    
-   println(" ");
-    
-   port.readBytesUntil('&', inBuffer);  //read in all data until '&' is encountered
-    
-    if (inBuffer != null) {
-      String myString = new String(inBuffer);
-      //println(myString);  //for testing only
-      
-      
-      //p is all sensor data (with a's and b's) ('&' is eliminated) ///////////////
-      
-      String[] p = splitTokens(myString, "&");  
-      if (p.length < 2) return;  //exit this function if packet is broken
-      
-      
-      //get touch sensor reading //////////////////////////////////////////////////
-      
-      String[] touch_sensor = splitTokens(p[0], "a");  //get light sensor reading 
-      if (touch_sensor.length != 3) return;  //exit this function if packet is broken
-      //println(light_sensor[1]);
-      touchSensorValue = int(trim(touch_sensor[1]));
-      
-      print("touch sensor:");
-      print(touchSensorValue);
-      println(" ");  
-
-      //get slider sensor (potentiometer) reading //////////////////////////////////////////////////
-      
-      String[] slider_sensor = splitTokens(p[0], "b");  //get slider sensor reading 
-      if (slider_sensor.length != 3) return;  //exit this function if packet is broken
-      //println(slider_sensor[1]);
-      sliderSensorValue = int(slider_sensor[1]);
-
-      print("slider sensor:");
-      print(sliderSensorValue);
-      println(" "); 
-      
-      //get button reading //////////////////////////////////////////////////
-      
-      String[] button_switch = splitTokens(p[0], "c");  //get slider sensor reading 
-      if (button_switch.length != 3) return;  //exit this function if packet is broken
-      //println(slider_sensor[1]);
-      buttonValue = int(button_switch[1]);
-
-      print("button value:");
-      print(buttonValue);
-      println(" "); 
-    }
-  }
-}
-
-
-
+ println("Available serial ports:");
+ println(Serial.list());
+ 
+ //port = new Serial(this, "COM3", 9600); 
+ }
+ 
+ void readSerialConnection() {
+ if (0 < port.available()) { // If data is available to read,
+ 
+ println(" ");
+ 
+ port.readBytesUntil('&', inBuffer);  //read in all data until '&' is encountered
+ 
+ if (inBuffer != null) {
+ String myString = new String(inBuffer);
+ //println(myString);  //for testing only
+ 
+ 
+ //p is all sensor data (with a's and b's) ('&' is eliminated) ///////////////
+ 
+ String[] p = splitTokens(myString, "&");  
+ if (p.length < 2) return;  //exit this function if packet is broken
+ 
+ 
+ //get touch sensor reading //////////////////////////////////////////////////
+ 
+ String[] touch_sensor = splitTokens(p[0], "a");  //get light sensor reading 
+ if (touch_sensor.length != 3) return;  //exit this function if packet is broken
+ //println(light_sensor[1]);
+ touchSensorValue = int(trim(touch_sensor[1]));
+ 
+ print("touch sensor:");
+ print(touchSensorValue);
+ println(" ");  
+ 
+ //get slider sensor (potentiometer) reading //////////////////////////////////////////////////
+ 
+ String[] slider_sensor = splitTokens(p[0], "b");  //get slider sensor reading 
+ if (slider_sensor.length != 3) return;  //exit this function if packet is broken
+ //println(slider_sensor[1]);
+ sliderSensorValue = int(slider_sensor[1]);
+ 
+ print("slider sensor:");
+ print(sliderSensorValue);
+ println(" "); 
+ 
+ //get button reading //////////////////////////////////////////////////
+ 
+ String[] button_switch = splitTokens(p[0], "c");  //get slider sensor reading 
+ if (button_switch.length != 3) return;  //exit this function if packet is broken
+ //println(slider_sensor[1]);
+ buttonValue = int(button_switch[1]);
+ 
+ print("button value:");
+ print(buttonValue);
+ println(" "); 
+ }
+ }
+ }
+ 
+ 
+ 
 /*======================
  CREATE OBJECTS
  ========================*/
@@ -153,8 +218,8 @@ void createConveyorBelt() {
 
 void createBgChefs() {
   for (int i = 0; i < 1; i++) {
-    bgChefs.add(new Chef(1500, 510, 5, 0, .7));
     bgChefs.add(new Chef(370, 490, -5, 0, .7));
+    bgChefs.add(new Chef(1500, 510, 5, 0, .7));
   }
 }
 
@@ -246,76 +311,70 @@ void updateFood() {
 }
 
 void checkButtonCollision() {
-   for (int i = 0; i < buttons.size(); i++) {
-     Buttons b = buttons.get(i);
-     
-     for (int f = 0; f<foods.size(); f++) {                                       //animate movement
-       Food foodItem = foods.get(f);
-       
-       //increase score if food is hit
-       if (foodItem.hitObject(b) == true && i == 0 && up == true) {
-         comboCounter += 1;
-         score.updateScore(20*comboCounter); 
-         foods.remove(f);
-       }
-       else if (foodItem.hitObject(b) == true && i == 1 && left == true) {
-         comboCounter += 1;
-         score.updateScore(20*comboCounter);
-         foods.remove(f);
-       }
-       else if (foodItem.hitObject(b) == true && i == 2 && right == true) {
-         comboCounter += 1;
-         score.updateScore(20*comboCounter);
-         foods.remove(f);
-       }
-       else if (foodItem.hitObject(b) == true && i == 3 && down == true) {
-         comboCounter += 1;
-         score.updateScore(20*comboCounter); 
-         foods.remove(f);
-       }
-       
-       ////decrease score if food is missed
-       //if (foodItem.hitObject(b) == false && i == 0 && up == true) {
-       //  comboCounter = 0; 
-       //}
-       //else if (foodItem.hitObject(b) == false && i == 1 && left == true) {
-       //  score.updateScore(-20);
-       //}
-       //else if (foodItem.hitObject(b) == false && i == 2 && right == true) {
-       //  score.updateScore(-20);
-       //}
-       //else if (foodItem.hitObject(b) == false && i == 3 && down == true) {
-       //  score.updateScore(-20); 
-       //}
-     }
-   }
+  for (int i = 0; i < buttons.size(); i++) {
+    Buttons b = buttons.get(i);
+
+    for (int f = 0; f<foods.size(); f++) {                                       //animate movement
+      Food foodItem = foods.get(f);
+
+      //increase score if food is hit
+      if (foodItem.hitObject(b) == true && i == 0 && up == true) {
+        comboCounter += 1;
+        score.updateScore(20*comboCounter); 
+        foods.remove(f);
+      } else if (foodItem.hitObject(b) == true && i == 1 && left == true) {
+        comboCounter += 1;
+        score.updateScore(20*comboCounter);
+        foods.remove(f);
+      } else if (foodItem.hitObject(b) == true && i == 2 && right == true) {
+        comboCounter += 1;
+        score.updateScore(20*comboCounter);
+        foods.remove(f);
+      } else if (foodItem.hitObject(b) == true && i == 3 && down == true) {
+        comboCounter += 1;
+        score.updateScore(20*comboCounter); 
+        foods.remove(f);
+      }
+
+      ////decrease score if food is missed
+      //if (foodItem.hitObject(b) == false && i == 0 && up == true) {
+      //  comboCounter = 0; 
+      //}
+      //else if (foodItem.hitObject(b) == false && i == 1 && left == true) {
+      //  score.updateScore(-20);
+      //}
+      //else if (foodItem.hitObject(b) == false && i == 2 && right == true) {
+      //  score.updateScore(-20);
+      //}
+      //else if (foodItem.hitObject(b) == false && i == 3 && down == true) {
+      //  score.updateScore(-20); 
+      //}
+    }
+  }
 }
 
 void checkConveyorBeltCollision() {
   for (int i = 0; i < cBelt.size(); i++) {
     ConveyorBelt cb = cBelt.get(i);
-    
+
     for (int f = 0; f<foods.size(); f++) {                                       //animate movement
-       Food foodItem = foods.get(f);
-       
-       //increase score if food is hit
-       if (foodItem.hitObject(cb) == true && i == 0 && up == true) {
-         comboCounter = 1;
-         score.updateScore(-20); 
-         println("hit");
-       }
-       else if (foodItem.hitObject(cb) == true && i == 1 && left == true) {
-         comboCounter = 1;
-         score.updateScore(-20);
-       }
-       else if (foodItem.hitObject(cb) == true && i == 2 && right == true) {
-         comboCounter = 1;
-         score.updateScore(-20);
-       }
-       else if (foodItem.hitObject(cb) == true && i == 3 && down == true) {
-         comboCounter = 1;
-         score.updateScore(-20); 
-       }
+      Food foodItem = foods.get(f);
+
+      //increase score if food is hit
+      if (foodItem.hitObject(cb) == true && i == 0 && up == true) {
+        comboCounter = 1;
+        score.updateScore(-20); 
+        println("hit");
+      } else if (foodItem.hitObject(cb) == true && i == 1 && left == true) {
+        comboCounter = 1;
+        score.updateScore(-20);
+      } else if (foodItem.hitObject(cb) == true && i == 2 && right == true) {
+        comboCounter = 1;
+        score.updateScore(-20);
+      } else if (foodItem.hitObject(cb) == true && i == 3 && down == true) {
+        comboCounter = 1;
+        score.updateScore(-20);
+      }
     }
   }
 }
@@ -324,7 +383,7 @@ void comboScore() {
   pushStyle();
   fill(0);
   if (comboCounter >= 1) {
-    text("Combo: x" + comboCounter, 1600, 75);    //sub title 
+    text("Combo: x" + comboCounter, 1600, 75);    //sub title
   }
   popStyle();
 }
@@ -335,6 +394,7 @@ void comboScore() {
 
 void loadAssets() {
   gameBg = loadImage("game-background.jpg");
+  homeBg = loadImage("home-background.jpg");
   cashScore = loadImage("cash-bill.jpg");
   chefSprite = loadImage("chef-sprite.png");
   upArrow = loadImage("data/img/UpArrow.png");
@@ -424,114 +484,103 @@ void playBGM (String file) {
 
 void volumeControl() {
   int volumeValue;
-  
-  if (sliderSensorValue <= 0){
+
+  if (sliderSensorValue <= 0) {
     volumeValue = -100
-    ; 
-  }
-  else if (sliderSensorValue <= 50) {
-    volumeValue = -10; 
-  }
-  else if (sliderSensorValue <= 100) {
-    volumeValue = 0; 
-  }
-  else if (sliderSensorValue <= 150) {
-    volumeValue = 10; 
-  }
-  else if (sliderSensorValue <= 200) {
-    volumeValue = 20; 
-  }
-  else if (sliderSensorValue <= 255) {
-    volumeValue = 30; 
-  }
-  else {
+      ;
+  } else if (sliderSensorValue <= 50) {
+    volumeValue = -10;
+  } else if (sliderSensorValue <= 100) {
+    volumeValue = 0;
+  } else if (sliderSensorValue <= 150) {
+    volumeValue = 10;
+  } else if (sliderSensorValue <= 200) {
+    volumeValue = 20;
+  } else if (sliderSensorValue <= 255) {
+    volumeValue = 30;
+  } else {
     volumeValue = 0;          //set volume default volume
   }
-  
+
   song1.setGain(volumeValue);
   song2.setGain(volumeValue);
 }
-  
+
 void touchInput() {
   //touch sensor cases
-  if (touchSensorValue == 8){
+  if (touchSensorValue == 8) {
     left = true;
     checkButtonCollision();
-  }
-  else if (touchSensorValue == 9){
+  } else if (touchSensorValue == 9) {
     down = true;
     checkButtonCollision();
-  }
-  else if (touchSensorValue == 10){
+  } else if (touchSensorValue == 10) {
     up = true;
     checkButtonCollision();
-  }
-  else if (touchSensorValue == 11){
+  } else if (touchSensorValue == 11) {
     right = true;
     println("right");
     checkButtonCollision();
-  }
-  else if (touchSensorValue == 13) {
+  } else if (touchSensorValue == 13) {
     left = false;
     down = false;
     up = false;
     right = false;
     checkButtonCollision();
   }
-  
+
   //button switch cases
   if (buttonValue == 0) {
-    //do nothing 
-  }
-  else if (buttonValue == 1) {
+    //do nothing
+  } else if (buttonValue == 1) {
     //confirm action
   }
 }
-  
-  
+
+
 /*======================
  CONTROLS
  ========================*/
 void keyPressed() {
-    if (key == 'a' || key == 'A') {
-      left = true;
-      println("left is " + left);
-      if (gameState == GAMEPLAY_SCREEN_STATE) {
-        checkButtonCollision();
-        //checkConveyorBeltCollision();
-        score.updateScore(-10);
-      }
-      //gameState = GAMEPLAY_SCREEN_STATE;
-      //song2.pause();
-      //playBGM(SONG1);
-    } else if (key == 's' || key == 'S') {
-      down = true;
-      println("down is " + down);
-      if (gameState == GAMEPLAY_SCREEN_STATE) {
-        checkButtonCollision();
-        //checkConveyorBeltCollision();
-        score.updateScore(-10);
-      }
-    } else if (key == 'w' || key == 'W') {
-      up = true;
-      println("up is " + up);
-      if (gameState == GAMEPLAY_SCREEN_STATE) {
-        checkButtonCollision();
-        //checkConveyorBeltCollision();
-        score.updateScore(-10);
-      }
-    } else if (key == 'd' || key == 'D') {
-      right = true;
-      println("right is " + right);
-      if (gameState == GAMEPLAY_SCREEN_STATE) {
-        checkButtonCollision();
-        //checkConveyorBeltCollision();
-        score.updateScore(-10);
-      }
-      //gameState = HOME_SCREEN_STATE;
-      //song1.pause();
-      //playBGM(SONG2);
+  if (key == 'a' || key == 'A') {
+    left = true;
+    println("left is " + left);
+    if (gameState == GAMEPLAY_SCREEN_STATE) {
+      checkButtonCollision();
+      //checkConveyorBeltCollision();
+      score.updateScore(-10);
     }
+    //gameState = GAMEPLAY_SCREEN_STATE;
+    //song2.pause();
+    //playBGM(SONG1);
+  } else if (key == 's' || key == 'S') {
+    down = true;
+    println("down is " + down);
+    if (gameState == GAMEPLAY_SCREEN_STATE) {
+      checkButtonCollision();
+      //checkConveyorBeltCollision();
+      score.updateScore(-10);
+    }
+  } else if (key == 'w' || key == 'W') {
+    up = true;
+    println("up is " + up);
+    if (gameState == GAMEPLAY_SCREEN_STATE) {
+      checkButtonCollision();
+      //checkConveyorBeltCollision();
+      score.updateScore(-10);
+    }
+  } else if (key == 'd' || key == 'D') {
+    right = true;
+    println("right is " + right);
+    if (gameState == GAMEPLAY_SCREEN_STATE) {
+      checkButtonCollision();
+      //checkConveyorBeltCollision();
+      score.updateScore(-10);
+    }
+    //gameState = HOME_SCREEN_STATE;
+    //song1.pause();
+    //playBGM(SONG2);
+  }
 }
 
 
