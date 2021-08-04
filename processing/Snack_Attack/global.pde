@@ -1,7 +1,7 @@
 //Initialize global variables
 PImage gameBg, homeBg, helpMenu, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 boolean up, right, left, down;
-int gameState;
+int gameState = 2;
 int gameSpeed = -5;
 int startPage=0;
 int gameUI=1;
@@ -67,6 +67,9 @@ void gameStart() {
 }
 
 void homeScreen() {
+  blink();
+  rgb();
+  shake();
   image(homeBg, 0, 0);
 
   updateBgChefs();
@@ -74,26 +77,7 @@ void homeScreen() {
   fill(0, 0, 0, 120);
   rect(0, 0, width, height);
 
-  textAlign(CENTER);
-  fill(r, g, b);
-  textSize(120);
-  text("SNACK ATTACK", width/2 + shakeX, height/1.85 - shakeY);
-
-  fill(255, 255, 255, blink);
-  textSize(48);
-  text("Press Switch to Start", width/2, height/1.55);
-
-  textAlign(LEFT);
-  textSize(16);
-  fill(255, 255, 255);
-  text("Jonathan Choi", 20, height - 45);
-  text("David Baik", 20, height - 25);
-
-  //textAlign(RIGHT);
-  text("IAT 267", 20, 35);
-  blink();
-  rgb();
-  shake();
+  homeText();
 }
 
 void helpScreen() {
@@ -109,33 +93,20 @@ void helpScreen() {
   rect(0, 0, width, height);
   image(helpMenu, 0, 0);
 
-  fill(255);
-  textSize(72);
-  text("SNACK ATTACK", 150, height/4);
-
-  textSize(36);
-  textAlign(LEFT);
-  fill(r,g,b);
-  text("Rush hour", 150 + shakeX, height/3 - shakeY);
-  fill(255);
-  text("is here and customers are pouring in!", 350, height/3);
-  text("Quickly send out the orders to as many customers", 150, height/3 + 35);
-  text("as you can! It's the attack of the snacks!", 150, height/3 +70);
-
-  text("on the appropriate pad on the gameboard to", 221, 700);
-  fill(255, 255, 255, blink);
-  text("Tap", 150, 700);
-  fill(255);
-  text("send the food out when it reaches the end of the", 150, 735);
-  text("conveyor belt.", 150, 770);
+  helpText();
 }
 
-void gameOver() {
-  text(score.score, width/2, height/2);
+void endScreen() {
+  blink();
+  image(homeBg, 0, 0);
+  fill(0, 0, 0, 120);
+  rect(0, 0, width, height);
+
+  endText();
 }
 
 /*=================================
- TEXT ANIMATIONS
+ TEXT ANIMATIONS + SCREEN TEXT
  ==================================*/
 void blink() {
   blink += blinkSpeed;
@@ -164,6 +135,65 @@ void rgb() {
   if (frameCount % 12 == 0) {
     b = random(1, 255);
   }
+}
+
+void homeText() {
+  textAlign(CENTER);
+  fill(r, g, b);
+  textSize(120);
+  text("SNACK ATTACK", width/2 + shakeX, height/1.85 - shakeY);
+
+  fill(255, 255, 255, blink);
+  textSize(36);
+  text("Press Switch to Start", width/2, height/1.6);
+
+  textAlign(LEFT);
+  textSize(16);
+  fill(255, 255, 255);
+  text("Jonathan Choi", 20, height - 45);
+  text("David Baik", 20, height - 25);
+
+  //textAlign(RIGHT);
+  text("IAT 267", 20, 35);
+}
+
+void helpText() {
+  fill(255);
+  textSize(72);
+  text("SNACK ATTACK", 150, height/4);
+
+  textSize(36);
+  textAlign(LEFT);
+  fill(r, g, b);
+  text("Rush hour", 150 + shakeX, height/3 - shakeY);
+  fill(255);
+  text("is here and customers are pouring in!", 350, height/3);
+  text("Quickly send out the orders to as many customers", 150, height/3 + 35);
+  text("as you can! It's the attack of the snacks!", 150, height/3 +70);
+
+  text("on the appropriate pad on the gameboard to", 221, 700);
+  fill(255, 255, 255, blink);
+  text("Tap", 150, 700);
+  fill(255);
+  text("send the food out when it reaches the end of the", 150, 735);
+  text("conveyor belt.", 150, 770);
+}
+
+void endText() {
+  textSize(72);
+  textAlign(CENTER);
+  fill(255);
+  text("You have earned", width/2, height/2.2);
+
+  image(cashScore, width/2 - 140, height/2);
+  textAlign(LEFT);
+  textSize(48);
+  text("$" + score.score, width/2 - 20, height/2 + 50);
+
+  textAlign(CENTER);
+  fill(255, 255, 255, blink);
+  textSize(36);
+  text("Press Switch to Return", width/2, height - 200);
 }
 
 /*=================================
@@ -431,7 +461,7 @@ void homeScreenText() {
   textSize(120);
   text("Snack Attack", width/2 - 100, height/2 - 50);    //sub title 
   popStyle();
-  
+
   //sub text
   pushStyle();
   textSize(24);
@@ -459,7 +489,6 @@ void loadAssets() {
 
   score = new Score();
 
-  PFont homeFont = loadFont("
   PFont gameFont = loadFont("LoRes12OT-BoldAltOakland-48.vlw");
   textFont(gameFont, 48);
   createBgChefs();
@@ -528,11 +557,9 @@ void playBGM (String file) {
 
   if (file == HOME_BGM) {
     sound = homeBGM;
-  } 
-  else if (file == SONG1) {
+  } else if (file == SONG1) {
     sound = song1;
-  } 
-  else if (file == SONG2) {
+  } else if (file == SONG2) {
     sound = song2;
   }
 
