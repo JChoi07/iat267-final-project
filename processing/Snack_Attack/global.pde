@@ -426,7 +426,7 @@ void volumeControl() {
   int volumeValue;
   
   if (sliderSensorValue <= 0){
-    volumeValue = -20
+    volumeValue = -100
     ; 
   }
   else if (sliderSensorValue <= 50) {
@@ -456,25 +456,27 @@ void touchInput() {
   //touch sensor cases
   if (touchSensorValue == 8){
     left = true;
-    println("left");
+    checkButtonCollision();
   }
   else if (touchSensorValue == 9){
     down = true;
-    println("down");
+    checkButtonCollision();
   }
   else if (touchSensorValue == 10){
     up = true;
-    println("up");
+    checkButtonCollision();
   }
   else if (touchSensorValue == 11){
     right = true;
     println("right");
+    checkButtonCollision();
   }
   else if (touchSensorValue == 13) {
     left = false;
     down = false;
     up = false;
     right = false;
+    checkButtonCollision();
   }
   
   //button switch cases

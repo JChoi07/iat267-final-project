@@ -68,11 +68,11 @@ void loop() {
 //      Serial.println(" was  touched");
 //      delay(100);
       touchSensorValue = i;                        //set touchSensorValue variable to the touch pad number that is being interacted with
-
+    }
+    
     //Blue LED
     if (touchsensor.touched&(1<<i) && touchSensorValue == 8)  {     //turn on Blue LED's if touch sensors not being interacted with
         digitalWrite(ledBlue, HIGH);
-        touchSensorKey = "W";
     }
     else if (!touchsensor.touched&(1<<i) && touchSensorValue != 8)  {    //turn off Blue LED's if touch sensors not being interacted with
         digitalWrite(ledBlue, LOW);
@@ -81,7 +81,6 @@ void loop() {
     //Red LED
     if (touchsensor.touched&(1<<i) && touchSensorValue == 9)  {    //turn on Red LED's if touch sensors not being interacted with
         digitalWrite(ledRed, HIGH);
-        touchSensorKey = "A";
     }
     else if (!touchsensor.touched&(1<<i) && touchSensorValue != 9)  {     //turn off Red LED's if touch sensors not being interacted with
         digitalWrite(ledRed, LOW);
@@ -90,7 +89,6 @@ void loop() {
     //Green LED
     if (touchsensor.touched&(1<<i) && touchSensorValue == 10)  {     //turn on Green LED's if touch sensors not being interacted with
         digitalWrite(ledGreen, HIGH);
-        touchSensorKey = "S";
     }
     else if (!touchsensor.touched&(1<<i) && touchSensorValue != 10)  {    //turn off Green LED if touch sensors not being interacted with
         digitalWrite(ledGreen, LOW);
@@ -99,7 +97,6 @@ void loop() {
     //Yellow LED
     if (touchsensor.touched&(1<<i) && touchSensorValue == 11)  {     //turn on Yellow LED if touch sensors not being interacted with
         digitalWrite(ledYellow, HIGH);
-        touchSensorKey = "D";
     }
     else if (!touchsensor.touched&(1<<i) && touchSensorValue != 11)  {     //turn off Yellow LED if touch sensors not being interacted with
         digitalWrite(ledYellow, LOW);
@@ -109,7 +106,6 @@ void loop() {
    //Turn off LED's and set touch sensor value if touch sensors not being interacted with
    if (!touchsensor.touched&(1<<i))  {     
       touchSensorValue = 13;
-      touchSensorKey = "Z";
    }
  }
 
