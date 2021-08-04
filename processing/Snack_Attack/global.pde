@@ -1,7 +1,7 @@
 //Initialize global variables
 PImage gameBg, homeBg, helpMenu, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 boolean up, right, left, down;
-int gameState = 2;
+int gameState;
 int gameSpeed = -5;
 int startPage=0;
 int gameUI=1;
