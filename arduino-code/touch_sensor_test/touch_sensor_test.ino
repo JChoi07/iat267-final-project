@@ -132,4 +132,5 @@ void loop() {
 
   //print carriage return and newline
   Serial.println(); 
+  delay(100);
 }
