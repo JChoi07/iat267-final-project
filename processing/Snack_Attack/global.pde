@@ -1,5 +1,5 @@
 //Initialize global variables
-PImage gameBg, homeBg, cashScore, upArrow, downArrow, leftArrow, rightArrow;
+PImage gameBg, homeBg, helpMenu, cashScore, upArrow, downArrow, leftArrow, rightArrow;
 boolean up, right, left, down;
 int gameState;
 int gameSpeed = -5;
@@ -12,6 +12,9 @@ int blink = 255;
 int blinkSpeed = 20;
 int shakeX, shakeY;
 PImage chefSprite;
+float r = 255;
+float g = 255;
+float b = 255;
 Score score;
 Char character;
 
@@ -71,31 +74,13 @@ void homeScreen() {
   rect(0, 0, width, height);
 
   textAlign(CENTER);
-  fill(255, 255, 255);
+  fill(r, g, b);
   textSize(120);
   text("SNACK ATTACK", width/2 + shakeX, height/1.85 - shakeY);
-
-  shakeX += random(-1.5, 1.5);
-  shakeY += random(-1.5, 1.5);
 
   fill(255, 255, 255, blink);
   textSize(48);
   text("Press Switch to Start", width/2, height/1.55);
-
-  //fill(100, 5, 252);
-  //strokeWeight(2);
-  //rectMode(CENTER);
-  //rect(width/2, height/1.3, 200, 60, 5);
-
-  //strokeWeight(0);
-  //fill(255, 255, 255, 200);
-  //rect(width/2 + 92, height/1.3 - 14, 4, 14);
-  //rect(width/2 + 92, height/1.3 + 4, 4, 4);
-  //rectMode(CORNER);
-
-  //textSize(30);
-  //fill(255, 255, 255, blink);
-  //text("HELP", width/2, height/1.28);
 
   textAlign(LEFT);
   textSize(16);
@@ -105,7 +90,53 @@ void homeScreen() {
 
   //textAlign(RIGHT);
   text("IAT 267", 20, 35);
+  blink();
+  rgb();
+  shake();
+}
 
+void helpScreen() {
+  blink();
+  shake();
+  rgb();
+  image(homeBg, 0, 0);
+
+  updateBgChefs();
+  rectMode(CORNER);
+  strokeWeight(0);
+  fill(0, 0, 0, 120);
+  rect(0, 0, width, height);
+  image(helpMenu, 0, 0);
+
+  fill(255);
+  textSize(72);
+  text("SNACK ATTACK", 150, height/4);
+
+  textSize(36);
+  textAlign(LEFT);
+  fill(r,g,b);
+  text("Rush hour", 150 + shakeX, height/3 - shakeY);
+  fill(255);
+  text("is here and customers are pouring in!", 350, height/3);
+  text("Quickly send out the orders to as many customers", 150, height/3 + 35);
+  text("as you can! It's the attack of the snacks!", 150, height/3 +70);
+
+  text("on the appropriate pad on the gameboard to", 221, 700);
+  fill(255, 255, 255, blink);
+  text("Tap", 150, 700);
+  fill(255);
+  text("send the food out when it reaches the end of the", 150, 735);
+  text("conveyor belt.", 150, 770);
+}
+
+void gameOver() {
+  text(score.score, width/2, height/2);
+}
+
+/*=================================
+ TEXT ANIMATIONS
+ ==================================*/
+void blink() {
   blink += blinkSpeed;
 
   if (blink > 255 || blink < 0) {
@@ -117,17 +148,21 @@ void homeScreen() {
   }
 }
 
-void helpScreen() {
-  background(255);
-  rectMode(CORNER);
-  strokeWeight(0);
-  fill(0, 0, 0, 120);
-  rect(0, 0, width, height);
-  updateButtons();
+void shake() {
+  shakeX += random(-1.5, 1.5);
+  shakeY += random(-1.5, 1.5);
 }
 
-void gameOver() {
-  text(score.score, width/2, height/2);
+void rgb() {
+  if (frameCount % 12 == 0) {
+    r = random(1, 255);
+  }
+  if (frameCount % 12 == 0) {
+    g = random(1, 255);
+  }
+  if (frameCount % 12 == 0) {
+    b = random(1, 255);
+  }
 }
 
 /*=================================
@@ -395,6 +430,7 @@ void comboScore() {
 void loadAssets() {
   gameBg = loadImage("game-background.jpg");
   homeBg = loadImage("home-background.jpg");
+  helpMenu = loadImage("help-menu-buttons.png");
   cashScore = loadImage("cash-bill.jpg");
   chefSprite = loadImage("chef-sprite.png");
   upArrow = loadImage("data/img/UpArrow.png");
