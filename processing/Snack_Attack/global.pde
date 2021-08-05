@@ -4,7 +4,7 @@ boolean up, right, left, down;
 boolean buttonCheck = false;
 boolean buttonEndCheck = false;
 int gameState;
-int gameSpeed = -5;
+int gameSpeed = -10;
 int startPage=0;
 int gameUI=1;
 int w=200;
@@ -13,7 +13,7 @@ int x, y;
 int blink = 255;
 int blinkSpeed = 20;
 int shakeX, shakeY;
-int song1Timer = 100;
+int song1Timer = 2000;
 PImage chefSprite;
 float r = 255;
 float g = 255;
@@ -47,7 +47,8 @@ Minim m;
 final String HOME_BGM = ("music/fibbage-3-lobby-music.mp3");
 final String SONG1 = ("music/club-penguin-pizza-parlor.mp3");
 final String SONG2 = ("music/Stardust Speedway Zone Act 1 - Sonic Mania [OST].mp3");
-AudioPlayer homeBGM, song1, song2;
+final String END_BGM = ("music/restaurant-sound-effect.mp3");
+AudioPlayer homeBGM, song1, song2, endBGM;
 
 
 //Initialize classes and arrays
@@ -70,7 +71,9 @@ void gameStart() {
 }
 
 void homeScreen() {
-  song1Timer = 100;
+  score.score = 0;
+  song1Timer = 2000;
+  gameSpeed = -10;
   blink();
   rgb();
   shake();
@@ -157,8 +160,8 @@ void homeText() {
   textAlign(LEFT);
   textSize(16);
   fill(255, 255, 255);
-  text("Jonathan Choi", 20, height - 45);
-  text("David Baik", 20, height - 25);
+  text("Jonathan Choi", 20, height - 65);
+  text("David Baik", 20, height - 45);
 
   //textAlign(RIGHT);
   text("IAT 267", 20, 35);
@@ -508,6 +511,7 @@ void loadAssets() {
   homeBGM = m.loadFile(HOME_BGM);
   song1 = m.loadFile(SONG1);
   song2 = m.loadFile(SONG2);
+  endBGM = m.loadFile(END_BGM);
 }
 
 /*======================
@@ -528,8 +532,20 @@ void updateGameUI() {
   updateFood();
   comboScore();
   
+  //end gameplay once song is over
   if (song1Timer <= 0) {
-    gameState = END_SCREEN_STATE;  
+    gameState = END_SCREEN_STATE; 
+    playBGM(END_BGM);
+  }
+  
+  //stop sending food once song reaches a certain point
+  if (song1Timer <= 550) {
+    gameSpeed = 0;  
+  }
+  
+  //pause song once it is over
+  if (song1Timer <= 50) {
+    song2.pause();
   }
 }
 
@@ -545,7 +561,10 @@ void playBGM (String file) {
     sound = song1;
   } else if (file == SONG2) {
     sound = song2;
+  } else if (file == END_BGM) {
+    sound = endBGM; 
   }
+   
 
   sound.rewind();
   sound.play();
@@ -556,24 +575,26 @@ void volumeControl() {
   int volumeValue;
 
   if (sliderSensorValue <= 0) {
-    volumeValue = -100
+    volumeValue = 30
       ;
   } else if (sliderSensorValue <= 50) {
-    volumeValue = -10;
+    volumeValue = 20;
   } else if (sliderSensorValue <= 100) {
     volumeValue = 0;
   } else if (sliderSensorValue <= 150) {
-    volumeValue = 10;
+    volumeValue = -10;
   } else if (sliderSensorValue <= 200) {
-    volumeValue = 20;
+    volumeValue = -20;
   } else if (sliderSensorValue <= 255) {
-    volumeValue = 30;
+    volumeValue = -100;
   } else {
     volumeValue = 0;          //set volume default volume
   }
-
+  
+  homeBGM.setGain(volumeValue);
   song1.setGain(volumeValue);
   song2.setGain(volumeValue);
+  endBGM.setGain(volumeValue);
 }
 
 void touchInput() {
@@ -618,7 +639,7 @@ void touchInput() {
     gameState = HOME_SCREEN_STATE;  
     buttonCheck = false;
     buttonEndCheck = false;
-    song2.pause();
+    endBGM.pause();
     playBGM(HOME_BGM);
   }
 } 

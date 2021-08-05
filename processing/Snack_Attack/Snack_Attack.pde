@@ -31,6 +31,6 @@ void draw() {
   readSerialConnection();
   touchInput();
   volumeControl();
-  println(song1Timer);
+  println(song1Timer, gameSpeed);
   //println(up, down, left, right);
 }
