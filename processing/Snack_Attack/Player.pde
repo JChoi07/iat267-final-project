@@ -1,3 +1,5 @@
+//player class used to control main chef
+
 class Player extends Chef {
   Player (float x, float y, float xSpd, float ySpd, float scale) {
     super(x, y, xSpd, ySpd, scale);

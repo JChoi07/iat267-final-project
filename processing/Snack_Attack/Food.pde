@@ -1,3 +1,5 @@
+//food object acting as notes for rhythm game
+
 class Food extends Object {
   boolean hit;
   PImage food;
@@ -40,6 +42,7 @@ class Food extends Object {
     //} 
   }
   
+  //check if food is ontop of button
   boolean hitObject(Object o) {
     if ((pos.x - o.pos.x) < (diameter.x/2 + o.diameter.x/2) && abs(pos.y - o.pos.y) < (diameter.y/2 + o.diameter.y/2)){
       return true;

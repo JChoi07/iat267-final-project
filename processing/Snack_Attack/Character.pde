@@ -1,3 +1,5 @@
+//character class used to change visuals of main player sprite based on inputs
+
 class Char extends Object {
   boolean up, right, left, down;
   int state = 0;

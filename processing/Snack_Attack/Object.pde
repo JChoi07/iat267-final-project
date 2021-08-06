@@ -1,3 +1,5 @@
+//object superclass used to hold similar methods for other objects
+
 class Object {
   protected PVector pos, vel, diameter;
   protected int w, h;

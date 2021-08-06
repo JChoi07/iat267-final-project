@@ -1,3 +1,5 @@
+//conveyor belt object that food moves on
+
 class ConveyorBelt extends Object {
   ArrayList<ConveyorBeltLines> cbLines = new ArrayList<ConveyorBeltLines>();
   

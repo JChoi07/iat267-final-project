@@ -1,3 +1,5 @@
+//conveyor belt lines that move to simulate movement of the conveyor belt
+
 class ConveyorBeltLines extends Object {
   color conveyorBeltLine = color(91, 89, 89);
   PVector diameter;
