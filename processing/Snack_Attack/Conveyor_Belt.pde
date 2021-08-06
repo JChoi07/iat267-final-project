@@ -22,12 +22,6 @@ class ConveyorBelt extends Object {
     rect(0, 0, diameter.x, diameter.y);
     popMatrix();
   }
- 
-  //void setUpLines() {
-  //  for(int i = 0; i<25; i++){
-  //    cbLines.add(new ConveyorBeltLines(0 + (100 * i), pos.y, 0, 0));
-  // }
-  //}
 
   void animateLines() {
    for(int i = 0; i<cbLines.size(); i++){
@@ -36,10 +30,7 @@ class ConveyorBelt extends Object {
    }
   }
   
-
   void update(){
     render(); 
-    //setUpLines();
-    //animateLines();
   }
 }

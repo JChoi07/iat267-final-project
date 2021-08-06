@@ -26,21 +26,6 @@ class Food extends Object {
     render(); 
     animate();
   }
-
-  void checkCollision() {
-    //if (pos.x > 141) {    //complete miss
-    //  score.updateScore(-10);
-    //} 
-    //else if (pos.x > 70 && pos.y < 140) {  //slight miss to the right 
-    //  score.updateScore(10);
-    //}
-    //else if (pos.x > 0 && pos.y < 70) {  //slight miss to the left
-    //  score.updateScore(10);
-    //}
-    //else if (pos.x == 70) {   //direct hit
-    //  score.updateScore(20);
-    //} 
-  }
   
   //check if food is ontop of button
   boolean hitObject(Object o) {

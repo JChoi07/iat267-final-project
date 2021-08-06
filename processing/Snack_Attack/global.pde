@@ -19,7 +19,6 @@ float r = 255;
 float g = 255;
 float b = 255;
 Score score;
-Char character;
 
 int upBelt = 630;
 int rightBelt = 740;
@@ -59,7 +58,6 @@ ArrayList<Buttons> buttons = new ArrayList<Buttons>();
 ArrayList<ConveyorBelt> cBelt = new ArrayList<ConveyorBelt>();
 ArrayList<ConveyorBeltLines> cbLines = new ArrayList<ConveyorBeltLines>();
 ConveyorBeltLines line;
-//Buttons button;
 
 /*======================
  GAME STATES
@@ -214,69 +212,69 @@ void endText() {
  ==================================*/
 
 void createSerialConnection() {
- println("Available serial ports:");
- println(Serial.list());
- 
- port = new Serial(this, "COM3", 9600); //windows laptop
- //port = new Serial(this, "/dev/cu.usbserial-D306DZMR", 9600); //for mac
- }
- 
- void readSerialConnection() {
- if (0 < port.available()) { // If data is available to read,
- 
- println(" ");
- 
- port.readBytesUntil('&', inBuffer);  //read in all data until '&' is encountered
- 
- if (inBuffer != null) {
- String myString = new String(inBuffer);
- //println(myString);  //for testing only
- 
- 
- //p is all sensor data (with a's and b's) ('&' is eliminated) ///////////////
- 
- String[] p = splitTokens(myString, "&");  
- if (p.length < 2) return;  //exit this function if packet is broken
- 
- 
- //get touch sensor reading //////////////////////////////////////////////////
- 
- String[] touch_sensor = splitTokens(p[0], "a");  //get light sensor reading 
- if (touch_sensor.length != 3) return;  //exit this function if packet is broken
- //println(light_sensor[1]);
- touchSensorValue = int(trim(touch_sensor[1]));
- 
- print("touch sensor:");
- print(touchSensorValue);
- println(" ");  
- 
- //get slider sensor (potentiometer) reading //////////////////////////////////////////////////
- 
- String[] slider_sensor = splitTokens(p[0], "b");  //get slider sensor reading 
- if (slider_sensor.length != 3) return;  //exit this function if packet is broken
- //println(slider_sensor[1]);
- sliderSensorValue = int(slider_sensor[1]);
- 
- print("slider sensor:");
- print(sliderSensorValue);
- println(" "); 
- 
- //get button reading //////////////////////////////////////////////////
- 
- String[] button_switch = splitTokens(p[0], "c");  //get slider sensor reading 
- if (button_switch.length != 3) return;  //exit this function if packet is broken
- //println(slider_sensor[1]);
- buttonValue = int(button_switch[1]);
- 
- print("button value:");
- print(buttonValue);
- println(" "); 
- }
- }
- }
- 
- 
- 
+  println("Available serial ports:");
+  println(Serial.list());
+
+  port = new Serial(this, "COM3", 9600); //windows laptop
+  //port = new Serial(this, "/dev/cu.usbserial-D306DZMR", 9600); //for mac
+}
+
+void readSerialConnection() {
+  if (0 < port.available()) { // If data is available to read,
+
+    println(" ");
+
+    port.readBytesUntil('&', inBuffer);  //read in all data until '&' is encountered
+
+    if (inBuffer != null) {
+      String myString = new String(inBuffer);
+      //println(myString);  //for testing only
+
+
+      //p is all sensor data (with a's and b's) ('&' is eliminated) ///////////////
+
+      String[] p = splitTokens(myString, "&");  
+      if (p.length < 2) return;  //exit this function if packet is broken
+
+
+      //get touch sensor reading //////////////////////////////////////////////////
+
+      String[] touch_sensor = splitTokens(p[0], "a");  //get light sensor reading 
+      if (touch_sensor.length != 3) return;  //exit this function if packet is broken
+      //println(light_sensor[1]);
+      touchSensorValue = int(trim(touch_sensor[1]));
+
+      print("touch sensor:");
+      print(touchSensorValue);
+      println(" ");  
+
+      //get slider sensor (potentiometer) reading //////////////////////////////////////////////////
+
+      String[] slider_sensor = splitTokens(p[0], "b");  //get slider sensor reading 
+      if (slider_sensor.length != 3) return;  //exit this function if packet is broken
+      //println(slider_sensor[1]);
+      sliderSensorValue = int(slider_sensor[1]);
+
+      print("slider sensor:");
+      print(sliderSensorValue);
+      println(" "); 
+
+      //get button reading //////////////////////////////////////////////////
+
+      String[] button_switch = splitTokens(p[0], "c");  //get slider sensor reading 
+      if (button_switch.length != 3) return;  //exit this function if packet is broken
+      //println(slider_sensor[1]);
+      buttonValue = int(button_switch[1]);
+
+      print("button value:");
+      print(buttonValue);
+      println(" ");
+    }
+  }
+}
+
+
+
 /*======================
  CREATE OBJECTS
  ========================*/
@@ -320,13 +318,13 @@ void setUpLines() {
 void createFood() {
   for (int i = 0; i < 10; i++) {
     int randomY = (int) random(0, 4);
-    
+
     //distribute food objects between 4 conveyor belts randomly
     int prevRandomY = randomY;
     if (prevRandomY == randomY) {
       randomY = (int) random(0, 4);
     }
-  
+
     foods.add(new Food(width + 65 + (i * 140 * (int)random(1, 3)), 625 + (randomY * 110), gameSpeed, 0));
   }
 }
@@ -388,7 +386,7 @@ void updateFood() {
       score.updateScore(-20); //decrease score if food is missed
       comboCounter = 1;
     }
-    
+
     //add food items to array list if number drops below 10
     if (foods.size() < 10) {
       int randomY = (int) random(0, 4);
@@ -489,19 +487,19 @@ void updateGameUI() {
   player.update();
   updateFood();
   comboScore();
-  
+
   //end gameplay once song is over
   if (song1Timer <= 0) {
     gameState = END_SCREEN_STATE; 
     playBGM(END_BGM);
   }
-  
+
   //windows laptop
   //stop sending food once song reaches a certain point
   if (song1Timer <= 550) {
-    gameSpeed = 0;  
+    gameSpeed = 0;
   }
-  
+
   //pause song once it is over
   if (song1Timer <= 50) {
     song2.pause();
@@ -509,7 +507,7 @@ void updateGameUI() {
 
   /*
   //mac
-  //stop sending food once song reaches a certain point
+   //stop sending food once song reaches a certain point
    if (song1Timer <= 250) {
    gameSpeed = 0;  
    }
@@ -525,7 +523,7 @@ void updateGameUI() {
  ========================*/
 void playBGM (String file) {
   AudioPlayer sound = null;
-  
+
   //play different song tracks based on which string is accessed
   if (file == HOME_BGM) {
     sound = homeBGM;
@@ -534,9 +532,9 @@ void playBGM (String file) {
   } else if (file == SONG2) {
     sound = song2;
   } else if (file == END_BGM) {
-    sound = endBGM; 
+    sound = endBGM;
   }
-   
+
 
   sound.rewind();
   sound.play();
@@ -546,7 +544,7 @@ void playBGM (String file) {
 //adjust volume of game based on potentiometer
 void volumeControl() {
   int volumeValue;
-  
+
   //set volume value
   if (sliderSensorValue <= 0) {
     volumeValue = 30
@@ -564,7 +562,7 @@ void volumeControl() {
   } else {
     volumeValue = 0;          //set volume default volume
   }
-  
+
   //adjust volume value of songs
   homeBGM.setGain(volumeValue);
   song1.setGain(volumeValue);
@@ -582,18 +580,13 @@ void keyPressed() {
     println("left is " + left);
     if (gameState == GAMEPLAY_SCREEN_STATE) {
       checkButtonCollision();
-      //checkConveyorBeltCollision();
       score.updateScore(-10);
     }
-    //gameState = GAMEPLAY_SCREEN_STATE;
-    //song2.pause();
-    //playBGM(SONG1);
   } else if (key == 's' || key == 'S') {
     down = true;
     println("down is " + down);
     if (gameState == GAMEPLAY_SCREEN_STATE) {
       checkButtonCollision();
-      //checkConveyorBeltCollision();
       score.updateScore(-10);
     }
   } else if (key == 'w' || key == 'W') {
@@ -601,7 +594,6 @@ void keyPressed() {
     println("up is " + up);
     if (gameState == GAMEPLAY_SCREEN_STATE) {
       checkButtonCollision();
-      //checkConveyorBeltCollision();
       score.updateScore(-10);
     }
   } else if (key == 'd' || key == 'D') {
@@ -609,12 +601,8 @@ void keyPressed() {
     println("right is " + right);
     if (gameState == GAMEPLAY_SCREEN_STATE) {
       checkButtonCollision();
-      //checkConveyorBeltCollision();
       score.updateScore(-10);
     }
-    //gameState = HOME_SCREEN_STATE;
-    //song1.pause();
-    //playBGM(SONG2);
   }
 }
 
@@ -652,20 +640,19 @@ void touchInput() {
 
   //button switch cases   
   if (buttonValue == 0 && gameState == HELP_SCREEN_STATE) { 
-    buttonCheck = true; 
+    buttonCheck = true;
   } 
   if (buttonValue == 0 && gameState == HOME_SCREEN_STATE) { 
-    buttonEndCheck = true; 
+    buttonEndCheck = true;
   } 
-   
-  if (buttonValue == 1 && buttonEndCheck == true && gameState == HOME_SCREEN_STATE){ 
-    gameState = HELP_SCREEN_STATE;  
+
+  if (buttonValue == 1 && buttonEndCheck == true && gameState == HOME_SCREEN_STATE) { 
+    gameState = HELP_SCREEN_STATE;
   } else if (buttonValue == 1 && buttonCheck == true && gameState == HELP_SCREEN_STATE) { 
     gameState = GAMEPLAY_SCREEN_STATE; 
     homeBGM.pause();
     playBGM(SONG2);
-  } 
-  else if (buttonValue == 1 && gameState == END_SCREEN_STATE) {
+  } else if (buttonValue == 1 && gameState == END_SCREEN_STATE) {
     gameState = HOME_SCREEN_STATE;  
     buttonCheck = false;
     buttonEndCheck = false;
