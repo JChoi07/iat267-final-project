@@ -1,3 +1,5 @@
+//chef superclass that holds methods used by background chefs and the main player chef
+
 class Chef extends Object {
   PImage sprite;
   int w = 200;

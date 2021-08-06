@@ -1,3 +1,5 @@
+//button class used as hitbox for food
+
 class Buttons extends Object {
   color buttonColor = color(180, 171, 171);
   color buttonStroke = color(61, 61, 61);

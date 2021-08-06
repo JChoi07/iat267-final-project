@@ -1,3 +1,5 @@
+//score class used to display user score
+
 class Score {
   int score;
   PFont scoreFont;
