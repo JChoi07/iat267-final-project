@@ -13,13 +13,12 @@ int x, y;
 int blink = 255;
 int blinkSpeed = 20;
 int shakeX, shakeY;
-int song1Timer = 2000;
+int song1Timer = 2000; //windows laptop
 PImage chefSprite;
 float r = 255;
 float g = 255;
 float b = 255;
 Score score;
-Char character;
 
 int upBelt = 630;
 int rightBelt = 740;
@@ -72,7 +71,7 @@ void gameStart() {
 
 void homeScreen() {
   score.score = 0;
-  song1Timer = 2000;
+  song1Timer = 2000;  //windows laptop
   gameSpeed = -10;
   blink();
   rgb();
@@ -211,68 +210,69 @@ void endText() {
  ==================================*/
 
 void createSerialConnection() {
- println("Available serial ports:");
- println(Serial.list());
- 
- port = new Serial(this, "COM3", 9600); 
- }
- 
- void readSerialConnection() {
- if (0 < port.available()) { // If data is available to read,
- 
- println(" ");
- 
- port.readBytesUntil('&', inBuffer);  //read in all data until '&' is encountered
- 
- if (inBuffer != null) {
- String myString = new String(inBuffer);
- //println(myString);  //for testing only
- 
- 
- //p is all sensor data (with a's and b's) ('&' is eliminated) ///////////////
- 
- String[] p = splitTokens(myString, "&");  
- if (p.length < 2) return;  //exit this function if packet is broken
- 
- 
- //get touch sensor reading //////////////////////////////////////////////////
- 
- String[] touch_sensor = splitTokens(p[0], "a");  //get light sensor reading 
- if (touch_sensor.length != 3) return;  //exit this function if packet is broken
- //println(light_sensor[1]);
- touchSensorValue = int(trim(touch_sensor[1]));
- 
- print("touch sensor:");
- print(touchSensorValue);
- println(" ");  
- 
- //get slider sensor (potentiometer) reading //////////////////////////////////////////////////
- 
- String[] slider_sensor = splitTokens(p[0], "b");  //get slider sensor reading 
- if (slider_sensor.length != 3) return;  //exit this function if packet is broken
- //println(slider_sensor[1]);
- sliderSensorValue = int(slider_sensor[1]);
- 
- print("slider sensor:");
- print(sliderSensorValue);
- println(" "); 
- 
- //get button reading //////////////////////////////////////////////////
- 
- String[] button_switch = splitTokens(p[0], "c");  //get slider sensor reading 
- if (button_switch.length != 3) return;  //exit this function if packet is broken
- //println(slider_sensor[1]);
- buttonValue = int(button_switch[1]);
- 
- print("button value:");
- print(buttonValue);
- println(" "); 
- }
- }
- }
- 
- 
- 
+  println("Available serial ports:");
+  println(Serial.list());
+
+  port = new Serial(this, "COM3", 9600); //for windows
+  //port = new Serial(this, "/dev/cu.usbserial-D306DZMR", 9600); //for mac
+}
+
+void readSerialConnection() {
+  if (0 < port.available()) { // If data is available to read,
+
+    println(" ");
+
+    port.readBytesUntil('&', inBuffer);  //read in all data until '&' is encountered
+
+    if (inBuffer != null) {
+      String myString = new String(inBuffer);
+      //println(myString);  //for testing only
+
+
+      //p is all sensor data (with a's and b's) ('&' is eliminated) ///////////////
+
+      String[] p = splitTokens(myString, "&");  
+      if (p.length < 2) return;  //exit this function if packet is broken
+
+
+      //get touch sensor reading //////////////////////////////////////////////////
+
+      String[] touch_sensor = splitTokens(p[0], "a");  //get light sensor reading 
+      if (touch_sensor.length != 3) return;  //exit this function if packet is broken
+      //println(light_sensor[1]);
+      touchSensorValue = int(trim(touch_sensor[1]));
+
+      print("touch sensor:");
+      print(touchSensorValue);
+      println(" ");  
+
+      //get slider sensor (potentiometer) reading //////////////////////////////////////////////////
+
+      String[] slider_sensor = splitTokens(p[0], "b");  //get slider sensor reading 
+      if (slider_sensor.length != 3) return;  //exit this function if packet is broken
+      //println(slider_sensor[1]);
+      sliderSensorValue = int(slider_sensor[1]);
+
+      print("slider sensor:");
+      print(sliderSensorValue);
+      println(" "); 
+
+      //get button reading //////////////////////////////////////////////////
+
+      String[] button_switch = splitTokens(p[0], "c");  //get slider sensor reading 
+      if (button_switch.length != 3) return;  //exit this function if packet is broken
+      //println(slider_sensor[1]);
+      buttonValue = int(button_switch[1]);
+
+      print("button value:");
+      print(buttonValue);
+      println(" ");
+    }
+  }
+}
+
+
+
 /*======================
  CREATE OBJECTS
  ========================*/
@@ -531,22 +531,35 @@ void updateGameUI() {
   player.update();
   updateFood();
   comboScore();
-  
+
   //end gameplay once song is over
   if (song1Timer <= 0) {
     gameState = END_SCREEN_STATE; 
     playBGM(END_BGM);
   }
-  
+
   //stop sending food once song reaches a certain point
+  //windows laptop
   if (song1Timer <= 550) {
-    gameSpeed = 0;  
+    gameSpeed = 0;
   }
-  
+
   //pause song once it is over
   if (song1Timer <= 50) {
     song2.pause();
   }
+
+  /*
+  //stop sending food once song reaches a certain point
+   //mac
+   if (song1Timer <= 250) {
+   gameSpeed = 0;  
+   }
+   
+   //pause song once it is over
+   if (song1Timer <= 230) {
+   song2.pause();
+   }*/
 }
 
 /*======================
@@ -562,9 +575,8 @@ void playBGM (String file) {
   } else if (file == SONG2) {
     sound = song2;
   } else if (file == END_BGM) {
-    sound = endBGM; 
+    sound = endBGM;
   }
-   
 
   sound.rewind();
   sound.play();
@@ -590,7 +602,7 @@ void volumeControl() {
   } else {
     volumeValue = 0;          //set volume default volume
   }
-  
+
   homeBGM.setGain(volumeValue);
   song1.setGain(volumeValue);
   song2.setGain(volumeValue);
@@ -622,20 +634,19 @@ void touchInput() {
 
   //button switch cases   
   if (buttonValue == 0 && gameState == HELP_SCREEN_STATE) { 
-    buttonCheck = true; 
+    buttonCheck = true;
   } 
   if (buttonValue == 0 && gameState == HOME_SCREEN_STATE) { 
-    buttonEndCheck = true; 
+    buttonEndCheck = true;
   } 
-   
-  if (buttonValue == 1 && buttonEndCheck == true && gameState == HOME_SCREEN_STATE){ 
-    gameState = HELP_SCREEN_STATE;  
+
+  if (buttonValue == 1 && buttonEndCheck == true && gameState == HOME_SCREEN_STATE) { 
+    gameState = HELP_SCREEN_STATE;
   } else if (buttonValue == 1 && buttonCheck == true && gameState == HELP_SCREEN_STATE) { 
     gameState = GAMEPLAY_SCREEN_STATE; 
     homeBGM.pause();
     playBGM(SONG2);
-  } 
-  else if (buttonValue == 1 && gameState == END_SCREEN_STATE) {
+  } else if (buttonValue == 1 && gameState == END_SCREEN_STATE) {
     gameState = HOME_SCREEN_STATE;  
     buttonCheck = false;
     buttonEndCheck = false;

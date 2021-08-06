@@ -8,6 +8,7 @@ class Player extends Chef {
     frameUpdate();
   }
 
+  //update character state depending on user input
   @Override
     void stateUpdate() {
     if (left) {
@@ -23,6 +24,7 @@ class Player extends Chef {
     }
   }
 
+  //update character sprite depending on state
   void frameUpdate() {
     switch(state) {
     case DEFAULT_STATE:

@@ -14,6 +14,7 @@ class Chef extends Object {
     sprite = loadImage("chef-sprite.png");
   }
 
+  //wall collision detection for chef
   void update() {
     super.update();
     if (pos.x > width - w/5 || pos.x < w/5) {
@@ -32,6 +33,7 @@ class Chef extends Object {
     stateUpdate();
   }
 
+  //set default state to be standby
   void stateUpdate() {
     state = DEFAULT_STATE;
   }
